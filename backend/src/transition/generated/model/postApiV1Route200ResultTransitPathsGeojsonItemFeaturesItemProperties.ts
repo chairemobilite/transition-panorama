@@ -4,16 +4,16 @@
  * Transition-API
  * OpenAPI spec version: 1.1
  */
-import type { PostApiV1Route200ResultTransitPathsGeoJsonItemFeaturesItemPropertiesAction } from './postApiV1Route200ResultTransitPathsGeoJsonItemFeaturesItemPropertiesAction';
+import type { PostApiV1Route200ResultTransitPathsGeojsonItemFeaturesItemPropertiesAction } from './postApiV1Route200ResultTransitPathsGeojsonItemFeaturesItemPropertiesAction';
 
-export type PostApiV1Route200ResultTransitPathsGeoJsonItemFeaturesItemProperties = {
+export type PostApiV1Route200ResultTransitPathsGeojsonItemFeaturesItemProperties = {
   /**
      * The current step number for this section of the route. The count starts at 0
      * @minimum 0
      */
   stepSequence: number;
   /** Whether this section of the route is travelled while walking or while on transportation */
-  action: PostApiV1Route200ResultTransitPathsGeoJsonItemFeaturesItemPropertiesAction;
+  action: PostApiV1Route200ResultTransitPathsGeojsonItemFeaturesItemPropertiesAction;
   /** The estimated duration of the trip along this section of the route, in seconds */
   distanceMeters: number;
   /** The estimated duration of the trip along this section of the route route, in seconds */

@@ -305,40 +305,40 @@ export const postApiV1RouteResponseResultTransitPathsItemStepsItemTwoTwoNodeCoor
 export const postApiV1RouteResponseResultTransitPathsItemStepsItemThreeTwoNodeCoordinatesMin = 2;
 export const postApiV1RouteResponseResultTransitPathsItemStepsItemThreeTwoNodeCoordinatesMax = 2;
 
-export const postApiV1RouteResponseResultTransitPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
-export const postApiV1RouteResponseResultTransitPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
+export const postApiV1RouteResponseResultTransitPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
+export const postApiV1RouteResponseResultTransitPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
 
-export const postApiV1RouteResponseResultTransitPathsGeoJsonItemFeaturesItemPropertiesStepSequenceMin = 0;
+export const postApiV1RouteResponseResultTransitPathsGeojsonItemFeaturesItemPropertiesStepSequenceMin = 0;
 
 export const postApiV1RouteResponseResultWalkingPathsItemGeometryCoordinatesItemMin = 2;
 export const postApiV1RouteResponseResultWalkingPathsItemGeometryCoordinatesItemMax = 2;
 
-export const postApiV1RouteResponseResultWalkingPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
-export const postApiV1RouteResponseResultWalkingPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
+export const postApiV1RouteResponseResultWalkingPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
+export const postApiV1RouteResponseResultWalkingPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
 
 export const postApiV1RouteResponseResultCyclingPathsItemGeometryCoordinatesItemMin = 2;
 export const postApiV1RouteResponseResultCyclingPathsItemGeometryCoordinatesItemMax = 2;
 
-export const postApiV1RouteResponseResultCyclingPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
-export const postApiV1RouteResponseResultCyclingPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
+export const postApiV1RouteResponseResultCyclingPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
+export const postApiV1RouteResponseResultCyclingPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
 
 export const postApiV1RouteResponseResultDrivingPathsItemGeometryCoordinatesItemMin = 2;
 export const postApiV1RouteResponseResultDrivingPathsItemGeometryCoordinatesItemMax = 2;
 
-export const postApiV1RouteResponseResultDrivingPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
-export const postApiV1RouteResponseResultDrivingPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
+export const postApiV1RouteResponseResultDrivingPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
+export const postApiV1RouteResponseResultDrivingPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
 
 export const postApiV1RouteResponseResultBusSuburbPathsItemGeometryCoordinatesItemMin = 2;
 export const postApiV1RouteResponseResultBusSuburbPathsItemGeometryCoordinatesItemMax = 2;
 
-export const postApiV1RouteResponseResultBusSuburbPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
-export const postApiV1RouteResponseResultBusSuburbPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
+export const postApiV1RouteResponseResultBusSuburbPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
+export const postApiV1RouteResponseResultBusSuburbPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
 
 export const postApiV1RouteResponseResultBusUrbanPathsItemGeometryCoordinatesItemMin = 2;
 export const postApiV1RouteResponseResultBusUrbanPathsItemGeometryCoordinatesItemMax = 2;
 
-export const postApiV1RouteResponseResultBusUrbanPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
-export const postApiV1RouteResponseResultBusUrbanPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
+export const postApiV1RouteResponseResultBusUrbanPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
+export const postApiV1RouteResponseResultBusUrbanPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
 
 
 
@@ -473,16 +473,16 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
   "nodeCoordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultTransitPathsItemStepsItemThreeTwoNodeCoordinatesMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultTransitPathsItemStepsItemThreeTwoNodeCoordinatesMax)).check(/*#__PURE__*/ zod.describe('longitude and latitude of the node where the action takes place, in the WSG84 coordinates system'))
 }))])).check(/*#__PURE__*/ zod.describe('List of steps which form this trip'))
 })).check(/*#__PURE__*/ zod.describe('A list of all calculated transit routes. Does not include geometry')),
-  "pathsGeoJson": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
+  "pathsGeojson": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['FeatureCollection']),
   "features": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['Feature']),
   "geometry": /*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['LineString']),
-  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultTransitPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultTransitPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMax)))
+  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultTransitPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultTransitPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax)))
 }),
   "properties": /*#__PURE__*/ zod.object({
-  "stepSequence": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.gte(postApiV1RouteResponseResultTransitPathsGeoJsonItemFeaturesItemPropertiesStepSequenceMin)).check(/*#__PURE__*/ zod.describe('The current step number for this section of the route. The count starts at 0')),
+  "stepSequence": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.gte(postApiV1RouteResponseResultTransitPathsGeojsonItemFeaturesItemPropertiesStepSequenceMin)).check(/*#__PURE__*/ zod.describe('The current step number for this section of the route. The count starts at 0')),
   "action": /*#__PURE__*/ zod.enum(['walking', 'ride']).check(/*#__PURE__*/ zod.describe('Whether this section of the route is travelled while walking or while on transportation')),
   "distanceMeters": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The estimated duration of the trip along this section of the route, in seconds')),
   "travelTimeSeconds": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The estimated duration of the trip along this section of the route route, in seconds'))
@@ -491,7 +491,7 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
 }))).check(/*#__PURE__*/ zod.describe('A list of all calculated transit routes as GeoJSON LineString FeatureCollection objects. Each FeatureCollection object represents one path. This object is only provided if the withGeojson query parameter is set to true')),
   "noRoutingReason": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.object({
   "message": /*#__PURE__*/ zod.string(),
-  "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
+  "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR', 'TR_CALCULATOR_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
 })).check(/*#__PURE__*/ zod.describe('An overview of the server side error in case of failure while executing the route request. If there is no error, this will not be included in the response.'))
 })).check(/*#__PURE__*/ zod.describe('Result of the calculation for the "transit" mode, if it was provided in the routingModes query parameter')),
   "walking": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.object({
@@ -503,13 +503,13 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
   "distanceMeters": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The distance travalled along this route, in meters')),
   "travelTimeSeconds": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The estimated duration of the trip along this route, in seconds'))
 })).check(/*#__PURE__*/ zod.describe('A list of all calculated routes')),
-  "pathsGeoJson": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
+  "pathsGeojson": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['FeatureCollection']),
   "features": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['Feature']),
   "geometry": /*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['LineString']),
-  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultWalkingPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultWalkingPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMax)))
+  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultWalkingPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultWalkingPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax)))
 }),
   "properties": /*#__PURE__*/ zod.object({
   "mode": /*#__PURE__*/ zod.string().check(/*#__PURE__*/ zod.describe('The mode of transportation used for this route')),
@@ -520,7 +520,7 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
 }))).check(/*#__PURE__*/ zod.describe('A list of all calculated routes as GeoJSON LineString FeatureCollection objects. Each FeatureCollection object represents one path. This object is only provided if the withGeojson query parameter is set to true')),
   "noRoutingReason": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.object({
   "message": /*#__PURE__*/ zod.string(),
-  "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
+  "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR', 'TR_CALCULATOR_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
 })).check(/*#__PURE__*/ zod.describe('An overview of the server side error in case of failure while executing the route request. If there is no error, this will not be included in the response.'))
 })).check(/*#__PURE__*/ zod.describe('Each mode of transportation in routingModes will have their own result in this format, except for "transit". The property names correspond directly to the names of the modes of transportation provided')),
   "cycling": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.object({
@@ -532,13 +532,13 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
   "distanceMeters": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The distance travalled along this route, in meters')),
   "travelTimeSeconds": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The estimated duration of the trip along this route, in seconds'))
 })).check(/*#__PURE__*/ zod.describe('A list of all calculated routes')),
-  "pathsGeoJson": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
+  "pathsGeojson": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['FeatureCollection']),
   "features": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['Feature']),
   "geometry": /*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['LineString']),
-  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultCyclingPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultCyclingPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMax)))
+  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultCyclingPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultCyclingPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax)))
 }),
   "properties": /*#__PURE__*/ zod.object({
   "mode": /*#__PURE__*/ zod.string().check(/*#__PURE__*/ zod.describe('The mode of transportation used for this route')),
@@ -549,7 +549,7 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
 }))).check(/*#__PURE__*/ zod.describe('A list of all calculated routes as GeoJSON LineString FeatureCollection objects. Each FeatureCollection object represents one path. This object is only provided if the withGeojson query parameter is set to true')),
   "noRoutingReason": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.object({
   "message": /*#__PURE__*/ zod.string(),
-  "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
+  "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR', 'TR_CALCULATOR_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
 })).check(/*#__PURE__*/ zod.describe('An overview of the server side error in case of failure while executing the route request. If there is no error, this will not be included in the response.'))
 })).check(/*#__PURE__*/ zod.describe('Each mode of transportation in routingModes will have their own result in this format, except for "transit". The property names correspond directly to the names of the modes of transportation provided')),
   "driving": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.object({
@@ -561,13 +561,13 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
   "distanceMeters": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The distance travalled along this route, in meters')),
   "travelTimeSeconds": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The estimated duration of the trip along this route, in seconds'))
 })).check(/*#__PURE__*/ zod.describe('A list of all calculated routes')),
-  "pathsGeoJson": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
+  "pathsGeojson": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['FeatureCollection']),
   "features": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['Feature']),
   "geometry": /*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['LineString']),
-  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultDrivingPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultDrivingPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMax)))
+  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultDrivingPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultDrivingPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax)))
 }),
   "properties": /*#__PURE__*/ zod.object({
   "mode": /*#__PURE__*/ zod.string().check(/*#__PURE__*/ zod.describe('The mode of transportation used for this route')),
@@ -578,7 +578,7 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
 }))).check(/*#__PURE__*/ zod.describe('A list of all calculated routes as GeoJSON LineString FeatureCollection objects. Each FeatureCollection object represents one path. This object is only provided if the withGeojson query parameter is set to true')),
   "noRoutingReason": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.object({
   "message": /*#__PURE__*/ zod.string(),
-  "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
+  "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR', 'TR_CALCULATOR_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
 })).check(/*#__PURE__*/ zod.describe('An overview of the server side error in case of failure while executing the route request. If there is no error, this will not be included in the response.'))
 })).check(/*#__PURE__*/ zod.describe('Each mode of transportation in routingModes will have their own result in this format, except for "transit". The property names correspond directly to the names of the modes of transportation provided')),
   "bus_suburb": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.object({
@@ -590,13 +590,13 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
   "distanceMeters": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The distance travalled along this route, in meters')),
   "travelTimeSeconds": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The estimated duration of the trip along this route, in seconds'))
 })).check(/*#__PURE__*/ zod.describe('A list of all calculated routes')),
-  "pathsGeoJson": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
+  "pathsGeojson": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['FeatureCollection']),
   "features": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['Feature']),
   "geometry": /*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['LineString']),
-  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultBusSuburbPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultBusSuburbPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMax)))
+  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultBusSuburbPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultBusSuburbPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax)))
 }),
   "properties": /*#__PURE__*/ zod.object({
   "mode": /*#__PURE__*/ zod.string().check(/*#__PURE__*/ zod.describe('The mode of transportation used for this route')),
@@ -607,7 +607,7 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
 }))).check(/*#__PURE__*/ zod.describe('A list of all calculated routes as GeoJSON LineString FeatureCollection objects. Each FeatureCollection object represents one path. This object is only provided if the withGeojson query parameter is set to true')),
   "noRoutingReason": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.object({
   "message": /*#__PURE__*/ zod.string(),
-  "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
+  "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR', 'TR_CALCULATOR_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
 })).check(/*#__PURE__*/ zod.describe('An overview of the server side error in case of failure while executing the route request. If there is no error, this will not be included in the response.'))
 })).check(/*#__PURE__*/ zod.describe('Each mode of transportation in routingModes will have their own result in this format, except for "transit". The property names correspond directly to the names of the modes of transportation provided')),
   "bus_urban": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.object({
@@ -619,13 +619,13 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
   "distanceMeters": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The distance travalled along this route, in meters')),
   "travelTimeSeconds": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The estimated duration of the trip along this route, in seconds'))
 })).check(/*#__PURE__*/ zod.describe('A list of all calculated routes')),
-  "pathsGeoJson": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
+  "pathsGeojson": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['FeatureCollection']),
   "features": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['Feature']),
   "geometry": /*#__PURE__*/ zod.object({
   "type": /*#__PURE__*/ zod.enum(['LineString']),
-  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultBusUrbanPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultBusUrbanPathsGeoJsonItemFeaturesItemGeometryCoordinatesItemMax)))
+  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultBusUrbanPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultBusUrbanPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax)))
 }),
   "properties": /*#__PURE__*/ zod.object({
   "mode": /*#__PURE__*/ zod.string().check(/*#__PURE__*/ zod.describe('The mode of transportation used for this route')),
@@ -636,7 +636,7 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
 }))).check(/*#__PURE__*/ zod.describe('A list of all calculated routes as GeoJSON LineString FeatureCollection objects. Each FeatureCollection object represents one path. This object is only provided if the withGeojson query parameter is set to true')),
   "noRoutingReason": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.object({
   "message": /*#__PURE__*/ zod.string(),
-  "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
+  "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR', 'TR_CALCULATOR_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
 })).check(/*#__PURE__*/ zod.describe('An overview of the server side error in case of failure while executing the route request. If there is no error, this will not be included in the response.'))
 })).check(/*#__PURE__*/ zod.describe('Each mode of transportation in routingModes will have their own result in this format, except for "transit". The property names correspond directly to the names of the modes of transportation provided'))
 }).check(/*#__PURE__*/ zod.describe('Result of the routing calculation'))
