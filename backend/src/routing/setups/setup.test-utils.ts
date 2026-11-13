@@ -192,7 +192,10 @@ export const createRouteFetcherForFakeTransition = async (
             userName: dummyText,
             password: dummyText,
         }),
-        { maxTotalTravelTimeSeconds: dummyNumber },
+        {
+            maxTotalTravelTimeSeconds: dummyNumber,
+            maxFirstWaitingTimeSeconds: dummyNumber,
+        },
     );
 };
 

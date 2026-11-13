@@ -85,3 +85,4 @@ stationNetworks:
 tripHours: [8, 12, 16]
 transitionRouting:
   maxTotalTravelTimeSeconds: 172800
+  maxFirstWaitingTimeSeconds: 7200

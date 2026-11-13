@@ -161,6 +161,7 @@ export const PublicConfigSchema = z.object({
     // Passed as is to each of Transition's route requests
     transitionRouting: z.object({
         maxTotalTravelTimeSeconds: z.int().positive(),
+        maxFirstWaitingTimeSeconds: z.int().positive(),
     }),
 });
 
