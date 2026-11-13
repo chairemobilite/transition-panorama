@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { ModeSchema } from './api/mode';
 import * as Utils from './utils';
 
 const MapConfigSchema = z.object({
@@ -24,7 +25,7 @@ export type UnimodalMode = z.infer<typeof UnimodalModeSchema>;
 const ScenarioNameSchema = z.string().min(1);
 
 // Modes the routing setup is meant to display.
-const RequiredModesSchema = z.array(z.string().min(1)).min(1);
+const RequiredModesSchema = z.array(ModeSchema.exclude(['other'])).min(1);
 
 const UnimodalRoutingSetupSchema = z.object({
     id: z.string().min(1),

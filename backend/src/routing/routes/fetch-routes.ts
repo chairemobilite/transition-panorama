@@ -48,7 +48,10 @@ type TransitPath = NonNullable<
     TransitionRouteResponse['result']['transit']
 >['paths'][number];
 
-const checkUsesRequiredModes = (path: TransitPath, requiredModes: string[]) => {
+const checkUsesRequiredModes = (
+    path: TransitPath,
+    requiredModes: Api.Mode[],
+) => {
     const usedModes = new Set(
         path.steps.flatMap((step) =>
             step.action === 'boarding' ? [step.mode] : [],
@@ -69,7 +72,7 @@ export class RouteFetcher {
     async fetchTransitRouteSteps(
         odTrip: OdTrip,
         scenarioName: string,
-        requiredModes: string[] = [],
+        requiredModes: Api.Mode[] = [],
     ): Promise<Api.RouteStep[] | null> {
         const transitionRoute = await this.fetchTransitRoute(
             odTrip,
