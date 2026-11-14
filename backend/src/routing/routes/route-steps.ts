@@ -57,13 +57,32 @@ const createUnimodalStep = (
     }
 };
 
+// Their rides' geometry has the whole path. The others' only has where they start and end.
+const modesWithFullGeometry: Api.Mode[] = ['metro', 'rail'];
+
+const createRideCoordinates = (
+    mode: Api.Mode,
+    from: Utils.Position,
+    to: Utils.Position,
+    shapeCoordinates: Utils.Position[] | undefined,
+): Utils.Position[] => {
+    if (!shapeCoordinates || !modesWithFullGeometry.includes(mode)) {
+        return [from, to];
+    }
+    // Joined to the stops, in case the shape doesn't quite reach them
+    return [from, ...shapeCoordinates, to];
+};
+
 const createTransitSteps = (
     path: TransitRouteResult['paths'][number],
     origin: Utils.Position,
     destination: Utils.Position,
+    // Each ride's shape, in order
+    rideShapes: Utils.Position[][],
 ): Api.RouteStep[] => {
     const steps: Api.RouteStep[] = [];
     let from = origin;
+    let rideIndex = 0;
     path.steps.forEach((step, index) => {
         switch (step.action) {
             case 'walking': {
@@ -109,14 +128,24 @@ const createTransitSteps = (
                 break;
             case 'unboarding': {
                 const to = step.nodeCoordinates;
+                const mode = getKnownMode(step.mode);
                 steps.push({
                     activity: 'inVehicle',
-                    mode: getKnownMode(step.mode),
-                    geometry: { type: 'LineString', coordinates: [from, to] },
+                    mode,
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: createRideCoordinates(
+                            mode,
+                            from,
+                            to,
+                            rideShapes.at(rideIndex),
+                        ),
+                    },
                     durationSeconds: step.inVehicleTime,
                     distanceMeters: step.inVehicleDistance,
                 });
                 from = to;
+                rideIndex += 1;
                 break;
             }
             default:
@@ -179,9 +208,14 @@ export const createTransitRouteSteps = (
     if (!path) {
         return null;
     }
+    const pathGeojson = result.transit?.pathsGeojson?.at(0);
+    const rideShapes = (pathGeojson?.features ?? [])
+        .filter((feature) => feature.properties.action === 'ride')
+        .map((feature) => feature.geometry.coordinates);
     return createTransitSteps(
         path,
         query.originGeojson.geometry.coordinates,
         query.destinationGeojson.geometry.coordinates,
+        rideShapes,
     );
 };
