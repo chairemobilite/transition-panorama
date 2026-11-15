@@ -57,6 +57,7 @@ export default defineConfig({
             },
         },
         output: {
+            clean: true, // Cleans transitionZod's files too, as it generates into the same folder later
             mode: 'single',
             client: 'fetch',
             target: './src/transition/generated',
