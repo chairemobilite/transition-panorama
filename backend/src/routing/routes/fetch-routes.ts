@@ -65,6 +65,7 @@ export class RouteFetcher {
         private readonly scenarioIds: ScenarioIds,
         private readonly transition: TransitionClient,
         private readonly transitionRouting: TransitionRouting,
+        private readonly modesWithFullGeometry: Api.Mode[],
     ) {}
 
     // Null when there's no route, or when it doesn't use all the required
@@ -82,7 +83,10 @@ export class RouteFetcher {
         if (path && !checkUsesRequiredModes(path, requiredModes)) {
             return null;
         }
-        return createTransitRouteSteps(transitionRoute);
+        return createTransitRouteSteps(
+            transitionRoute,
+            this.modesWithFullGeometry,
+        );
     }
 
     // Null when there's no route

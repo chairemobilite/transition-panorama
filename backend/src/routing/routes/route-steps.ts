@@ -57,14 +57,12 @@ const createUnimodalStep = (
     }
 };
 
-// Their rides' geometry has the whole path. The others' only has where they start and end.
-const modesWithFullGeometry: Api.Mode[] = ['metro', 'rail'];
-
 const createRideCoordinates = (
     mode: Api.Mode,
     from: Utils.Position,
     to: Utils.Position,
     shapeCoordinates: Utils.Position[] | undefined,
+    modesWithFullGeometry: Api.Mode[],
 ): Utils.Position[] => {
     if (!shapeCoordinates || !modesWithFullGeometry.includes(mode)) {
         return [from, to];
@@ -79,6 +77,7 @@ const createTransitSteps = (
     destination: Utils.Position,
     // Each ride's shape, in order
     rideShapes: Utils.Position[][],
+    modesWithFullGeometry: Api.Mode[],
 ): Api.RouteStep[] => {
     const steps: Api.RouteStep[] = [];
     let from = origin;
@@ -139,6 +138,7 @@ const createTransitSteps = (
                             from,
                             to,
                             rideShapes.at(rideIndex),
+                            modesWithFullGeometry,
                         ),
                     },
                     durationSeconds: step.inVehicleTime,
@@ -201,6 +201,7 @@ export const createUnimodalRouteSteps = (
 // Null when no path was found
 export const createTransitRouteSteps = (
     transitionRoute: TransitionRouteResponse,
+    modesWithFullGeometry: Api.Mode[],
 ): Api.RouteStep[] | null => {
     const { query, result } = transitionRoute;
     warnOfUnexpectedResults(result, 'transit');
@@ -217,5 +218,6 @@ export const createTransitRouteSteps = (
         query.originGeojson.geometry.coordinates,
         query.destinationGeojson.geometry.coordinates,
         rideShapes,
+        modesWithFullGeometry,
     );
 };

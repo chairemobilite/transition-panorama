@@ -158,6 +158,8 @@ export const PublicConfigSchema = z.object({
         .refine(checkHasUniqueIds, 'Station network ids must be unique'),
     // Hours of the day the trips can be made at
     tripHours: z.array(z.int().min(0).max(23)).min(1),
+    // Their transit rides' geometry has the whole path. The others' only has where they start and end.
+    modesWithFullGeometry: z.array(ModeSchema),
     // Passed as is to each of Transition's route requests
     transitionRouting: z.object({
         maxTotalTravelTimeSeconds: z.int().positive(),

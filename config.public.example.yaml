@@ -83,6 +83,7 @@ stationNetworks:
           lng: -73.566178542
           lat: 45.499919522
 tripHours: [8, 12, 16]
+modesWithFullGeometry: [metro, rail]
 transitionRouting:
   maxTotalTravelTimeSeconds: 172800
   maxFirstWaitingTimeSeconds: 7200

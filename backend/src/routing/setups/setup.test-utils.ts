@@ -196,6 +196,7 @@ export const createRouteFetcherForFakeTransition = async (
             maxTotalTravelTimeSeconds: dummyNumber,
             maxFirstWaitingTimeSeconds: dummyNumber,
         },
+        [],
     );
 };
 

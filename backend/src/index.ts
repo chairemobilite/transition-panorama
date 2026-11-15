@@ -21,6 +21,7 @@ const routeFetcher = new RouteFetcher(
     scenarioIds,
     transition,
     config.public.transitionRouting,
+    config.public.modesWithFullGeometry,
 );
 
 app.use(express.json());
