@@ -46,7 +46,7 @@ const findRouteDashArray = (rank: number, count: number): [number, number] => {
 // How many times more than the others a step of each mode bends
 const modeBendScales: Partial<Record<Api.Mode, number>> = {
     // So flights look like they leave the ground
-    plane: 3,
+    plane: 2.5,
 };
 
 /**
@@ -64,6 +64,45 @@ const findRouteStepBend = (
     return side * routeBend * (modeBendScales[getRouteStepMode(step)] ?? 1);
 };
 
+// The same for steps of the same mode along the same line
+const createRouteStepKey = (step: TravelRouteStep) => {
+    const { coordinates } = step.geometry;
+    // Assumes steps with the same mode, as many points, and the same start, middle and end are
+    // the same line, rather than comparing every point, as roads can have thousands
+    const points = [
+        coordinates.at(0),
+        coordinates.at(Math.floor(coordinates.length / 2)),
+        coordinates.at(-1),
+    ].map((position) =>
+        position?.map((coordinate) => coordinate.toFixed(5)).join(','),
+    );
+    return [getRouteStepMode(step), coordinates.length, ...points].join(' ');
+};
+
+/**
+ * Creates a function that gives a step's line as drawn. Steps along the same line are bent the same,
+ * so they overlap.
+ *
+ * @param sortedRoutes - Each route's lines are bent by its place in this order. When several
+ * routes share a line, it takes the bend of the first of them.
+ */
+const createStepGeometryFinder = (sortedRoutes: Api.Route[]) => {
+    const geometryByStepKey = new Map<string, LineString>();
+    sortedRoutes.forEach((route, rank) => {
+        for (const step of route.steps.filter(isTravelRouteStep)) {
+            const key = createRouteStepKey(step);
+            if (!geometryByStepKey.has(key)) {
+                const bend = findRouteStepBend(step, rank, sortedRoutes.length);
+                geometryByStepKey.set(key, createRouteStepGeometry(step, bend));
+            }
+        }
+    });
+    return (step: TravelRouteStep) =>
+        geometryByStepKey.get(createRouteStepKey(step)) ??
+        // This fallback is never used, as every step was recorded, but TypeScript can't know it
+        createRouteStepGeometry(step, 0);
+};
+
 /**
  * Creates how each route is drawn on the map, set apart from the others. Routes without steps
  * aren't drawn.
@@ -78,15 +117,13 @@ export const createDrawnRoutes = (
         // The dashes and bends hint at which routes are faster
         'travelTime',
     );
+    const findStepGeometry = createStepGeometryFinder(sortedRoutes);
     return new Map(
         sortedRoutes.map((route, rank) => {
             const dashArray = findRouteDashArray(rank, sortedRoutes.length);
             const drawnRoute: DrawnRoute = {
                 steps: route.steps.filter(isTravelRouteStep).map((step) => ({
-                    geometry: createRouteStepGeometry(
-                        step,
-                        findRouteStepBend(step, rank, sortedRoutes.length),
-                    ),
+                    geometry: findStepGeometry(step),
                     appearance: {
                         icon: getRouteStepIcon(step),
                         color: modeColors[getRouteStepMode(step)],
