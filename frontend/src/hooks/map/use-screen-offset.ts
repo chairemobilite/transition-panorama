@@ -1,6 +1,6 @@
-import { useMap } from '@vis.gl/react-maplibre';
 import type { Utils } from 'common';
-import { useCallback, useSyncExternalStore } from 'react';
+
+import { useMapSnapshot } from '@/hooks/map/use-map-snapshot';
 
 // So rounding errors, like when panning, don't count as a change
 const roundToTenth = (value: number) => Math.round(value * 10) / 10;
@@ -27,22 +27,7 @@ export function useScreenOffset(
     from: Utils.LngLat | undefined,
     to: Utils.LngLat | undefined,
 ): ScreenOffset | undefined {
-    const { current: mapRef } = useMap();
-    if (!mapRef) {
-        throw new Error('useScreenOffset must be used within a Map');
-    }
-    const map = mapRef.getMap();
-    const subscribe = useCallback(
-        (onChange: () => void) => {
-            map.on('move', onChange);
-            return () => {
-                map.off('move', onChange);
-            };
-        },
-        [map],
-    );
-    // As text, so an unchanged offset is equal and doesn't redraw
-    const offset = useSyncExternalStore(subscribe, () => {
+    const offset = useMapSnapshot('move', (map) => {
         if (!from || !to) {
             return undefined;
         }
