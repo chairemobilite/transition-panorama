@@ -123,6 +123,7 @@ function TripComparison({
                 >
                     <MapRoutePaths
                         routes={routes}
+                        order={order}
                         selectedRouteId={selectedRoute?.id ?? null}
                         onSelect={onSelectedRouteIdChange}
                     />
