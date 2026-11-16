@@ -74,15 +74,12 @@ export const createRouteStepGeometry = (
 /**
  * Creates the line a whole path is drawn as, from its steps' lines.
  *
- * @param steps - The path's steps, in order. Each starts where the previous one ends.
- * @param arcBend - See `createRouteStepGeometry`.
+ * @param stepGeometries - The lines of the path's steps, in order. Each starts where the previous
+ * one ends.
  */
 export const createRoutePathGeometry = (
-    steps: Api.RouteStep[],
-    arcBend: number,
+    stepGeometries: readonly LineString[],
 ): LineString => ({
     type: 'LineString',
-    coordinates: steps
-        .filter(isTravelRouteStep)
-        .flatMap((step) => createRouteStepGeometry(step, arcBend).coordinates),
+    coordinates: stepGeometries.flatMap((geometry) => geometry.coordinates),
 });

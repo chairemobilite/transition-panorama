@@ -1,40 +1,17 @@
 import type { Api } from 'common';
 import { Fragment, useState } from 'react';
 
-import type { MapLineStyles } from '@/components/map/map-line';
 import { MapRoutePath } from '@/features/trip-comparison/components/map/map-route-path';
 import MapRoutePathCallout from '@/features/trip-comparison/components/map/map-route-path-callout';
 import { BestRouteBadge } from '@/features/trip-comparison/components/route-path-summary/route-path-summary-header';
 import { useRoutePathCalloutPositions } from '@/features/trip-comparison/hooks/use-route-path-callout-positions';
-import { sortRoutes } from '@/features/trip-comparison/utils/route';
-import { getRouteStepIcon } from '@/features/trip-comparison/utils/route-step';
+import { createDrawnRoutes } from '@/features/trip-comparison/utils/drawn-route';
 import { useLayerStack } from '@/hooks/map/use-layer-stack';
 import { useIsPhone } from '@/hooks/use-is-phone';
 import { createNestedId } from '@/utils/nested-id';
 
 // The id a route's map sources and layers are nested under
 const createRoutePathId = (routeId: string) => createNestedId('route', routeId);
-
-// From 0 for the fastest to 1 for the slowest
-const findSlowness = (rank: number, count: number) =>
-    count > 1 ? rank / (count - 1) : 0;
-
-/**
- * Styles a path by its rank, from the fastest (`0`) to the slowest
- */
-const createRoutePathStyles = (rank: number, count: number): MapLineStyles => {
-    const slowness = findSlowness(rank, count);
-    return { dashArray: [3 - 2.75 * slowness, 1 + slowness] };
-};
-
-/**
- * Bends a path by its rank, from the fastest (`0`) to the slowest, to alternating sides
- */
-const findRoutePathBend = (rank: number, count: number) => {
-    const side = rank % 2 === 0 ? 1 : -1;
-    // More curved when faster, so the fastest is the longest and stands out
-    return side * (0.2 - 0.12 * findSlowness(rank, count));
-};
 
 interface MapRoutePathsProps {
     routes: Api.Route[];
@@ -51,15 +28,8 @@ const MapRoutePaths = ({
         onSelect(selectedRouteId === routeId ? null : routeId);
     };
 
-    const drawnRoutes = sortRoutes(
-        routes.filter(({ steps }) => steps.length > 0),
-        'travelTime',
-    ).map((route, rank, sortedRoutes) => ({
-        route,
-        pathId: createRoutePathId(route.id),
-        styles: createRoutePathStyles(rank, sortedRoutes.length),
-        bend: findRoutePathBend(rank, sortedRoutes.length),
-    }));
+    const drawnRoutes = createDrawnRoutes(routes);
+    const [fastestRouteId] = [...drawnRoutes.keys()];
 
     const callouts = useRoutePathCalloutPositions(drawnRoutes);
 
@@ -78,12 +48,14 @@ const MapRoutePaths = ({
 
     const isPhone = useIsPhone();
 
-    return drawnRoutes.map(({ route, pathId, styles, bend }, rank) => {
+    return routes.map((route) => {
+        const drawnRoute = drawnRoutes.get(route.id);
         const calloutPosition = callouts.positions.get(route.id);
-        if (!calloutPosition) {
+        if (!drawnRoute || !calloutPosition) {
             return null;
         }
-        const isBestRoute = rank === 0;
+        const pathId = createRoutePathId(route.id);
+        const isBestRoute = route.id === fastestRouteId;
         const isSelected = selectedRouteId === route.id;
         const isCalloutShown =
             // When a route is selected, the others' label is hidden
@@ -94,10 +66,7 @@ const MapRoutePaths = ({
             <Fragment key={route.id}>
                 <MapRoutePath
                     id={pathId}
-                    steps={route.steps}
-                    getStepIcon={getRouteStepIcon}
-                    styles={styles}
-                    bend={bend}
+                    steps={drawnRoute.steps}
                     emphasis={
                         selectedRouteId === null
                             ? 'default'

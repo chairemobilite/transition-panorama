@@ -1,18 +1,12 @@
-import type { Icon } from '@phosphor-icons/react';
-import type { Api } from 'common';
-
-import type { LineEmphasis, MapLineStyles } from '@/components/map/map-line';
+import type { LineEmphasis } from '@/components/map/map-line';
 import { MapRouteStep } from '@/features/trip-comparison/components/map/map-route-step';
+import type { DrawnRouteStep } from '@/features/trip-comparison/utils/drawn-route';
 import { createNestedId } from '@/utils/nested-id';
 
 export interface MapRoutePathProps {
     id: string;
     // Drawn in order, e.g. a single one for a path with one mode
-    steps: Api.RouteStep[];
-    getStepIcon: (step: Api.RouteStep) => Icon;
-    // The same for all the steps of the path
-    styles: MapLineStyles;
-    bend: number;
+    steps: DrawnRouteStep[];
     emphasis: LineEmphasis;
     onClick?: () => void;
     onPress?: () => void;
@@ -21,21 +15,16 @@ export interface MapRoutePathProps {
 export const MapRoutePath = ({
     id: pathId,
     steps,
-    getStepIcon,
-    styles,
-    bend,
     emphasis,
     onClick,
     onPress,
 }: MapRoutePathProps) => {
-    return steps.map((step, index) => (
+    return steps.map((drawnStep, index) => (
         <MapRouteStep
             key={index}
             id={createNestedId(pathId, index)}
-            step={step}
-            icon={getStepIcon(step)}
-            styles={styles}
-            bend={bend}
+            geometry={drawnStep.geometry}
+            appearance={drawnStep.appearance}
             emphasis={emphasis}
             onClick={onClick}
             onPress={onPress}

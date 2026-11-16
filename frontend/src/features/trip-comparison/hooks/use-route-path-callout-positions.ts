@@ -1,9 +1,10 @@
 import { bearing, destination, distance, lengthToDegrees } from '@turf/turf';
-import type { Api, Utils } from 'common';
+import type { Utils } from 'common';
 import type { LineString } from 'geojson';
 import { useMemo, useState } from 'react';
 
 import type { CalloutPosition } from '@/components/map/map-callout';
+import type { DrawnRoute } from '@/features/trip-comparison/utils/drawn-route';
 import { createRoutePathGeometry } from '@/features/trip-comparison/utils/route-step';
 import { useScreenOffset } from '@/hooks/map/use-screen-offset';
 import {
@@ -234,18 +235,21 @@ const spreadPositions = (
  * overlap; once dragged, where it was dragged to.
  */
 export const useRoutePathCalloutPositions = (
-    paths: readonly { route: Api.Route; bend: number }[],
+    // By route id
+    drawnRoutes: ReadonlyMap<string, DrawnRoute>,
 ): RoutePathCalloutPositions => {
-    // memo: "Heavy" computation
+    // memo: React Compiler doesn't cache this hook's values on its own
     const pathGeometryByRouteId = useMemo(
         () =>
             new Map(
-                paths.map(({ route, bend }) => [
-                    route.id,
-                    createRoutePathGeometry(route.steps, bend),
+                [...drawnRoutes].map(([routeId, drawnRoute]) => [
+                    routeId,
+                    createRoutePathGeometry(
+                        drawnRoute.steps.map(({ geometry }) => geometry),
+                    ),
                 ]),
             ),
-        [paths],
+        [drawnRoutes],
     );
 
     const odPair = useMemo(
