@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react';
 import type { CalloutPosition } from '@/components/map/map-callout';
 import type { DrawnRoute } from '@/features/trip-comparison/utils/drawn-route';
 import { createRoutePathGeometry } from '@/features/trip-comparison/utils/route-step';
+import { useMapSize } from '@/hooks/map/use-map-size';
 import { useScreenOffset } from '@/hooks/map/use-screen-offset';
 import {
     createLngLat,
@@ -32,9 +33,10 @@ const anchorRange = { start: 0.2, end: 0.8 };
 // As fractions of the distance between the lines' ends
 const leaderLength = 0.1;
 const labelGap = 0.1;
-// Once the OD pair is closer than this on screen, labels keep their distances
-// on screen rather than on the map, as they don't shrink when zoomed out
-const minOdPairPixels = 600;
+// Once the OD pair is closer on screen than this part of the map's smaller side,
+// labels keep their distances on screen rather than on the map, as they don't
+// shrink when zoomed out
+const minOdPairMapFraction = 1;
 // Below this, the OD pair is too close on screen for its callouts
 const minCalloutsOdPairPixels = 150;
 
@@ -186,9 +188,12 @@ const useIsZoomedOutTooFar = (odPair: OdPair | undefined) => {
 // keep their distances on screen
 const useLabelSpread = (odPair: OdPair | undefined) => {
     const odPairOnScreen = useScreenOffset(odPair?.origin, odPair?.destination);
+    const mapSize = useMapSize();
     if (!odPairOnScreen) {
         return undefined;
     }
+    const minOdPairPixels =
+        minOdPairMapFraction * Math.min(mapSize.width, mapSize.height);
     return Math.max(
         1,
         minOdPairPixels / Math.hypot(odPairOnScreen.x, odPairOnScreen.y),
