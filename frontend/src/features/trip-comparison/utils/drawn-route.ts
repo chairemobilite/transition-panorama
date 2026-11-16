@@ -8,6 +8,7 @@ import {
     getRouteStepIcon,
     getRouteStepMode,
     isTravelRouteStep,
+    type TravelRouteStep,
 } from '@/features/trip-comparison/utils/route-step';
 import { modeColors } from '@/utils/mode';
 
@@ -42,13 +43,25 @@ const findRouteDashArray = (rank: number, count: number): [number, number] => {
     return [3 - 2.75 * slowness, 1 + slowness];
 };
 
+// How many times more than the others a step of each mode bends
+const modeBendScales: Partial<Record<Api.Mode, number>> = {
+    // So flights look like they leave the ground
+    plane: 3,
+};
+
 /**
- * Bends a route by its rank, from the fastest (`0`) to the slowest, to alternating sides
+ * Bends a step by its mode, and by its route's rank, from the fastest (`0`) to the slowest, to
+ * alternating sides
  */
-const findRouteBend = (rank: number, count: number) => {
+const findRouteStepBend = (
+    step: TravelRouteStep,
+    rank: number,
+    count: number,
+) => {
     const side = rank % 2 === 0 ? 1 : -1;
     // More curved when faster, so the fastest is the longest and stands out
-    return side * (0.2 - 0.12 * findSlowness(rank, count));
+    const routeBend = 0.2 - 0.12 * findSlowness(rank, count);
+    return side * routeBend * (modeBendScales[getRouteStepMode(step)] ?? 1);
 };
 
 /**
@@ -68,10 +81,12 @@ export const createDrawnRoutes = (
     return new Map(
         sortedRoutes.map((route, rank) => {
             const dashArray = findRouteDashArray(rank, sortedRoutes.length);
-            const bend = findRouteBend(rank, sortedRoutes.length);
             const drawnRoute: DrawnRoute = {
                 steps: route.steps.filter(isTravelRouteStep).map((step) => ({
-                    geometry: createRouteStepGeometry(step, bend),
+                    geometry: createRouteStepGeometry(
+                        step,
+                        findRouteStepBend(step, rank, sortedRoutes.length),
+                    ),
                     appearance: {
                         icon: getRouteStepIcon(step),
                         color: modeColors[getRouteStepMode(step)],
