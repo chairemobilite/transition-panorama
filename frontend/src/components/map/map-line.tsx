@@ -22,6 +22,8 @@ export interface MapLineProps {
     styles: MapLineStyles;
     /** The theme variable of the line's own color. */
     color: `--${string}`;
+    /** Shift to the right of the line's direction, in line widths. Negative shifts it left. */
+    offset: number;
     /** How much the line stands out from the others. */
     emphasis: LineEmphasis;
     /** Repeated along the line, drawn by the map. */
@@ -46,6 +48,7 @@ export const MapLine = ({
     geometry,
     styles,
     color: colorVariable,
+    offset,
     emphasis,
     icon,
     onClick,
@@ -56,6 +59,8 @@ export const MapLine = ({
     const color = useThemeColor(
         emphasis === 'muted' ? '--foreground' : colorVariable,
     );
+    const width = selected ? 4 : 2.5;
+    const offsetPixels = offset * width;
     const hitLayerId = createNestedId(id, 'hit');
     useLayerHandlers(hitLayerId, onClick, onPress);
     // A finger needs a wider target than a mouse
@@ -82,6 +87,7 @@ export const MapLine = ({
                     paint={{
                         'line-color': color,
                         'line-width': 12,
+                        'line-offset': offsetPixels,
                         'line-opacity': selected ? 0.22 : 0,
                     }}
                 />
@@ -91,7 +97,8 @@ export const MapLine = ({
                     layout={{ 'line-cap': 'round', 'line-join': 'round' }}
                     paint={{
                         'line-color': color,
-                        'line-width': selected ? 4 : 2.5,
+                        'line-width': width,
+                        'line-offset': offsetPixels,
                         'line-opacity': lineOpacities[emphasis],
                         ...(dashArray && { 'line-dasharray': dashArray }),
                     }}
@@ -100,7 +107,11 @@ export const MapLine = ({
                 <Layer
                     id={hitLayerId}
                     type="line"
-                    paint={{ 'line-width': hitWidth, 'line-opacity': 0 }}
+                    paint={{
+                        'line-width': hitWidth,
+                        'line-offset': offsetPixels,
+                        'line-opacity': 0,
+                    }}
                 />
                 {/* Which way the line goes */}
                 <Layer

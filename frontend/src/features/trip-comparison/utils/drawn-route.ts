@@ -18,6 +18,8 @@ export interface RouteStepAppearance {
     color: `--${string}`;
     /** Dash and gap lengths, in line widths. */
     dashArray: [number, number];
+    /** Shift to the right of the line's direction, in line widths. Negative shifts it left. */
+    offset: number;
 }
 
 export interface DrawnRouteStep {
@@ -103,6 +105,34 @@ const createStepGeometryFinder = (sortedRoutes: Api.Route[]) => {
         createRouteStepGeometry(step, 0);
 };
 
+// Between the middles of lines set side by side, in line widths
+const sideBySideSpacing = 2.5;
+
+/**
+ * Creates a function that gives a step's offset. Steps along the same line are set side by side, in
+ * the routes' order, centred on where a single line would be.
+ */
+const createStepOffsetFinder = (sortedRoutes: Api.Route[]) => {
+    const routeIdsByStepKey = new Map<string, string[]>();
+    for (const route of sortedRoutes) {
+        for (const step of route.steps.filter(isTravelRouteStep)) {
+            const key = createRouteStepKey(step);
+            const routeIds = routeIdsByStepKey.get(key) ?? [];
+            if (!routeIds.includes(route.id)) {
+                routeIds.push(route.id);
+            }
+            routeIdsByStepKey.set(key, routeIds);
+        }
+    }
+    return (step: TravelRouteStep, routeId: string) => {
+        const routeIds = routeIdsByStepKey.get(createRouteStepKey(step)) ??
+            // This fallback is never used, as every step was recorded, but TypeScript can't know it
+            [routeId];
+        const place = routeIds.indexOf(routeId) - (routeIds.length - 1) / 2;
+        return place * sideBySideSpacing;
+    };
+};
+
 /**
  * Creates how each route is drawn on the map, set apart from the others. Routes without steps
  * aren't drawn.
@@ -118,6 +148,7 @@ export const createDrawnRoutes = (
         'travelTime',
     );
     const findStepGeometry = createStepGeometryFinder(sortedRoutes);
+    const findStepOffset = createStepOffsetFinder(sortedRoutes);
     return new Map(
         sortedRoutes.map((route, rank) => {
             const dashArray = findRouteDashArray(rank, sortedRoutes.length);
@@ -128,6 +159,7 @@ export const createDrawnRoutes = (
                         icon: getRouteStepIcon(step),
                         color: modeColors[getRouteStepMode(step)],
                         dashArray,
+                        offset: findStepOffset(step, route.id),
                     },
                 })),
             };

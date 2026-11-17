@@ -20,13 +20,14 @@ export const MapRouteStep = ({
     onClick,
     onPress,
 }: MapRouteStepProps) => {
-    const { icon, color, dashArray } = appearance;
+    const { icon, color, dashArray, offset } = appearance;
     return (
         <MapLine
             id={id}
             geometry={geometry}
             styles={{ dashArray }}
             color={color}
+            offset={offset}
             emphasis={emphasis}
             icon={icon}
             onClick={onClick}
