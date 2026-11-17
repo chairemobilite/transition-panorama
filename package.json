@@ -7,17 +7,17 @@
     "frontend"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "check": "npm run check -w common && npm run check -w backend && npm run check -w frontend",
-    "codegen": "npm run codegen --workspaces --if-present",
-    "dev": "concurrently -n backend,frontend -c blue,green \"npm run dev -w backend\" \"npm run dev -w frontend\"",
-    "fix": "npm run fix --workspaces",
-    "start": "npm start --workspaces --if-present",
-    "test": "npm test --workspaces --if-present",
-    "test:coverage": "npm run test:coverage --workspaces --if-present"
+    "build": "yarn workspaces foreach --all --exclude transition-public --topological-dev run build",
+    "check": "yarn workspace common check && yarn workspace backend check && yarn workspace frontend check",
+    "codegen": "yarn workspaces foreach --all --exclude transition-public run codegen",
+    "dev": "concurrently -n backend,frontend -c blue,green \"yarn workspace backend dev\" \"yarn workspace frontend dev\"",
+    "fix": "yarn workspaces foreach --all --exclude transition-public run fix",
+    "start": "yarn workspaces foreach --all --exclude transition-public run start",
+    "test": "yarn workspaces foreach --all --exclude transition-public run test",
+    "test:coverage": "yarn workspaces foreach --all --exclude transition-public run test:coverage"
   },
   "devDependencies": {
-    "concurrently": "^10.0.5",
-    "typescript": "6.0.3"
-  }
+    "concurrently": "^10.0.5"
+  },
+  "packageManager": "yarn@4.18.1+sha512.b2e1e7524f654f2749d32b4ebcb4622473cb5bcbc485df2007e12a154e50162a4d795526768bc5f5b8f81717bfd79deb2472813d86fb5ae2eb551fa9c872b08f"
 }

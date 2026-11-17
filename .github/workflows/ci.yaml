@@ -11,14 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - run: corepack enable
+
       - uses: actions/setup-node@v5
         with:
           node-version: 24
-          cache: npm
+          cache: yarn
 
-      - run: npm ci
+      - run: yarn install --immutable
 
       - name: Use the example config
         run: cp config.public.example.yaml config.public.yaml
 
-      - run: npm run check
+      - run: yarn check

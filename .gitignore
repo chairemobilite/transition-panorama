@@ -3,3 +3,9 @@ config.public.yaml
 .DS_Store
 node_modules
 coverage
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
