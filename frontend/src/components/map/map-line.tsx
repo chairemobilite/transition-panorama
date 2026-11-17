@@ -79,12 +79,17 @@ export const MapLine = ({
     const iconImageId = `${id}-icon-${color}-${haloColor}`;
     const iconRepeatZoom = useZoomForLength(geometry, iconSpacingPixels * 2);
     const arrowImageId = `line-arrow-${color}-${haloColor}`;
+    // Default emphasis: in the middle of lines set side by side, so their icons stack into one.
+    // Selected or muted: on their own line.
+    const symbolOffset: [number, number] =
+        emphasis === 'default' ? [0, 0] : [0, offsetPixels];
     const iconLayout = {
         // Hidden rather than removed, so it keeps its place under other layers
         visibility: emphasis === 'muted' ? 'none' : 'visible',
         'icon-image': iconImageId,
         'icon-allow-overlap': true,
         'icon-keep-upright': true,
+        'icon-offset': symbolOffset,
     } as const;
 
     return (
@@ -132,6 +137,7 @@ export const MapLine = ({
                         'symbol-spacing': arrowSpacingPixels,
                         'icon-image': arrowImageId,
                         'icon-keep-upright': false,
+                        'icon-offset': symbolOffset,
                     }}
                     paint={{ 'icon-opacity': selected ? 1 : 0.5 }}
                 />
