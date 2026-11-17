@@ -5,6 +5,7 @@ import type { LineString } from 'geojson';
 import { MapIconImage } from '@/components/map/map-icon-image';
 import { useLayerHandlers } from '@/hooks/map/use-layer-handlers';
 import { useZoomForLength } from '@/hooks/map/use-zoom-for-length';
+import { useIsPhone } from '@/hooks/use-is-phone';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { createNestedId } from '@/utils/nested-id';
@@ -38,6 +39,14 @@ const lineOpacities: Record<LineEmphasis, number> = {
     muted: 0.5,
 };
 
+// In pixels, wider on larger screens, where they have more room
+const lineWidths = {
+    phone: { default: 2.5, selected: 4 },
+    larger: { default: 5, selected: 6.5 },
+};
+// How far the glow of a selected line spreads past it, on each side
+const glowSpreadPixels = 4;
+
 const iconSizePixels = 16;
 const iconSpacingPixels = 75;
 const arrowSizePixels = 12;
@@ -59,7 +68,8 @@ export const MapLine = ({
     const color = useThemeColor(
         emphasis === 'muted' ? '--foreground' : colorVariable,
     );
-    const width = selected ? 4 : 2.5;
+    const widths = useIsPhone() ? lineWidths.phone : lineWidths.larger;
+    const width = selected ? widths.selected : widths.default;
     const offsetPixels = offset * width;
     const hitLayerId = createNestedId(id, 'hit');
     useLayerHandlers(hitLayerId, onClick, onPress);
@@ -86,7 +96,7 @@ export const MapLine = ({
                     layout={{ 'line-cap': 'round', 'line-join': 'round' }}
                     paint={{
                         'line-color': color,
-                        'line-width': 12,
+                        'line-width': width + 2 * glowSpreadPixels,
                         'line-offset': offsetPixels,
                         'line-opacity': selected ? 0.22 : 0,
                     }}
