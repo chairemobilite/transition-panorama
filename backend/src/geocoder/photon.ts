@@ -135,6 +135,21 @@ export class PhotonGeocoder implements Geocoder {
             FeatureCollectionSchema,
             await response.json(),
         );
-        return features.map(createPlace).filter((place) => place !== null);
+        return (
+            features
+                .map(createPlace)
+                .filter((place) => place !== null)
+                // Photon gives results with the same OSM type, OSM id and
+                // position. They're physically the same thing, but one would
+                // be a bridge and the other a highway, for example. We don't
+                // need that distinction. Photon has its own dedupe, but their
+                // names often differ slightly, so it doesn't catch them.
+                // https://github.com/komoot/photon/blob/master/docs/api-v1.md#dedupe-results
+                .filter(
+                    (place, index, places) =>
+                        places.findIndex((other) => other.id === place.id) ===
+                        index,
+                )
+        );
     }
 }

@@ -128,6 +128,17 @@ describe('searchPlaces', () => {
         setUpFakeEndpoint('api', [featureWithoutOsmTypeAndId, feature]);
         expect(await geocoder.searchPlaces({ text: 'text' })).toEqual([place]);
     });
+
+    // Our custom ids are generated from the OSM type, the OSM id and the position.
+    // Photon can return multiple features with those values being identical.
+    it('keeps only the first of the places with the same place id', async () => {
+        const featureWithSameId = createNodeFeature({
+            osm_id: 3,
+            name: 'Other name',
+        });
+        setUpFakeEndpoint('api', [feature, featureWithSameId]);
+        expect(await geocoder.searchPlaces({ text: 'text' })).toEqual([place]);
+    });
 });
 
 describe('lookUpPlace', () => {
