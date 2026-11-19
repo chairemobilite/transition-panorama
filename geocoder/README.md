@@ -22,3 +22,19 @@ Run from this folder, with `yarn <command>`.
 
 A page to compare what the geocoders find, in [./playground/](./playground/). It's for development only:
 nothing builds it, and the package doesn't export it.
+
+To run it:
+
+1. Copy the example config:
+
+    ```sh
+    cp playground/config.example.yaml playground/config.yaml
+    ```
+
+2. List the geocoders to compare in `playground/config.yaml`.
+
+3. Run the tool and open the address it shows:
+
+    ```sh
+    yarn dev
+    ```
