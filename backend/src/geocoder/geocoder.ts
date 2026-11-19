@@ -1,6 +1,18 @@
-import type { Api } from 'common';
+import type { Utils } from 'common';
+
+export interface PlaceSearch {
+    text: string;
+    // Places closer to it come first
+    focus?: Utils.LngLat | undefined;
+}
+
+export interface Place {
+    id: string;
+    label: string;
+    position: Utils.LngLat;
+}
 
 export interface Geocoder {
-    searchPlaces: (body: Api.PlaceSearchBody) => Promise<Api.Place[]>;
-    lookUpPlace: (id: string) => Promise<Api.Place | null>;
+    searchPlaces: (search: PlaceSearch) => Promise<Place[]>;
+    lookUpPlace: (id: string) => Promise<Place | null>;
 }

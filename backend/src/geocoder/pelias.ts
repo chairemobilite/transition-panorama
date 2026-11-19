@@ -1,6 +1,6 @@
-import { type Api, Utils } from 'common';
+import { Utils } from 'common';
 import { z } from 'zod';
-import type { Geocoder } from './geocoder';
+import type { Geocoder, Place, PlaceSearch } from './geocoder';
 
 // Pelias' answers, with only the fields we use
 // https://github.com/pelias/documentation/blob/master/autocomplete.md
@@ -22,7 +22,8 @@ const FeatureCollectionSchema = z.object({
     features: z.array(FeatureSchema),
 });
 
-const createAutocompleteParams = ({ text, focus }: Api.PlaceSearchBody) => {
+const createAutocompleteParams = (search: PlaceSearch) => {
+    const { text, focus } = search;
     const params = new URLSearchParams({ text });
     if (focus) {
         params.set('focus.point.lon', String(focus.lng));
@@ -31,7 +32,7 @@ const createAutocompleteParams = ({ text, focus }: Api.PlaceSearchBody) => {
     return params;
 };
 
-const createPlace = (feature: Feature): Api.Place => {
+const createPlace = (feature: Feature): Place => {
     const { geometry, properties } = feature;
     return {
         id: properties.gid,
@@ -46,15 +47,15 @@ const createPlace = (feature: Feature): Api.Place => {
 export class PeliasGeocoder implements Geocoder {
     constructor(private readonly url: string) {}
 
-    async searchPlaces(body: Api.PlaceSearchBody): Promise<Api.Place[]> {
+    async searchPlaces(search: PlaceSearch): Promise<Place[]> {
         const features = await this.fetchFeatures(
             'autocomplete',
-            createAutocompleteParams(body),
+            createAutocompleteParams(search),
         );
         return features.map(createPlace);
     }
 
-    async lookUpPlace(id: string): Promise<Api.Place | null> {
+    async lookUpPlace(id: string): Promise<Place | null> {
         const [feature] = await this.fetchFeatures(
             'place',
             new URLSearchParams({ ids: id }),

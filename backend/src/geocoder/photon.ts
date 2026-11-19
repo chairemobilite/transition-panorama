@@ -1,6 +1,6 @@
-import { type Api, Utils } from 'common';
+import { Utils } from 'common';
 import { z } from 'zod';
-import type { Geocoder } from './geocoder';
+import type { Geocoder, Place, PlaceSearch } from './geocoder';
 
 // Photon's answers, with only the fields we use
 // https://github.com/komoot/photon#search-and-geocoding-api
@@ -30,8 +30,8 @@ const FeatureCollectionSchema = z.object({
 // another place at the same point, like a shop and the building it's in
 const reverseLimit = 10;
 
-const createSearchParams = (body: Api.PlaceSearchBody) => {
-    const { text, focus } = body;
+const createSearchParams = (search: PlaceSearch) => {
+    const { text, focus } = search;
     const params = new URLSearchParams({ q: text });
     if (focus) {
         params.set('lon', String(focus.lng));
@@ -80,7 +80,7 @@ const parsePlaceIdPosition = (id: string): Utils.LngLat | null => {
     return result.success ? result.data : null;
 };
 
-const createPlace = (feature: Feature): Api.Place | null => {
+const createPlace = (feature: Feature): Place | null => {
     const { geometry, properties } = feature;
     if (properties.osm_type === undefined || properties.osm_id === undefined) {
         return null;
@@ -99,11 +99,11 @@ const createPlace = (feature: Feature): Api.Place | null => {
 export class PhotonGeocoder implements Geocoder {
     constructor(private readonly url: string) {}
 
-    async searchPlaces(body: Api.PlaceSearchBody): Promise<Api.Place[]> {
-        return this.fetchPlaces('api', createSearchParams(body));
+    async searchPlaces(search: PlaceSearch): Promise<Place[]> {
+        return this.fetchPlaces('api', createSearchParams(search));
     }
 
-    async lookUpPlace(id: string): Promise<Api.Place | null> {
+    async lookUpPlace(id: string): Promise<Place | null> {
         const position = parsePlaceIdPosition(id);
         if (!position) {
             return null;

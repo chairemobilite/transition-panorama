@@ -9,7 +9,11 @@ export const createPlaceRouter = (geocoder: Geocoder) => {
         res: express.Response,
     ) => {
         const body = parseRequest(Api.placeSearchEndpoint.body, req.body);
-        res.json(await geocoder.searchPlaces(body));
+        res.json(
+            Api.placeSearchEndpoint.response.parse(
+                await geocoder.searchPlaces(body),
+            ),
+        );
     };
 
     const handlePlaceLookup = async (
@@ -21,7 +25,7 @@ export const createPlaceRouter = (geocoder: Geocoder) => {
         if (!place) {
             throw new ApiError(404, { error: `Place not found: ${id}` });
         }
-        res.json(place);
+        res.json(Api.placeLookupEndpoint.response.parse(place));
     };
 
     const placeRouter = express.Router();
