@@ -1,4 +1,4 @@
-import { HttpUpstreamError } from '../utils/http';
+import { Utils } from 'common';
 import { postToken } from './generated/transitionAPI';
 
 export interface TransitionCredentials {
@@ -14,7 +14,7 @@ export const fetchTransitionToken = async (
         password: credentials.password,
     });
     if (response.status !== 200) {
-        throw new HttpUpstreamError(response);
+        throw new Utils.HttpUpstreamError(response);
     }
     return response.data;
 };

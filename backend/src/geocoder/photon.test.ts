@@ -9,7 +9,7 @@ import {
     it,
     vi,
 } from 'vitest';
-import { HttpUpstreamError, UpstreamError } from '../utils/http';
+import { Utils } from 'common';
 import { PhotonGeocoder } from './photon';
 
 const photonUrl = 'http://photon.test';
@@ -180,7 +180,7 @@ describe('errors', () => {
             }),
         );
         const search = geocoder.searchPlaces({ text: 'text' });
-        await expect(search).rejects.toBeInstanceOf(HttpUpstreamError);
+        await expect(search).rejects.toBeInstanceOf(Utils.HttpUpstreamError);
         await expect(search).rejects.toMatchObject({
             status: 400,
             data: 'Bad request',
@@ -194,7 +194,7 @@ describe('errors', () => {
             }),
         );
         await expect(geocoder.searchPlaces({ text: 'text' })).rejects.toThrow(
-            new UpstreamError('Request failed'),
+            new Utils.UpstreamError('Request failed'),
         );
     });
 
@@ -205,7 +205,7 @@ describe('errors', () => {
             }),
         );
         await expect(geocoder.searchPlaces({ text: 'text' })).rejects.toThrow(
-            new UpstreamError('Unexpected answer'),
+            new Utils.UpstreamError('Unexpected answer'),
         );
     });
 });

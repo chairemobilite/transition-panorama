@@ -1,4 +1,4 @@
-import { HttpUpstreamError } from '../utils/http';
+import { Utils } from 'common';
 import {
     postTransitionRoute,
     type TransitionRouteBody,
@@ -8,7 +8,7 @@ import { fetchTransitionScenarios, type TransitionScenario } from './scenarios';
 import { fetchTransitionToken, type TransitionCredentials } from './token';
 
 const checkIsUnauthorized = (error: unknown) => {
-    return error instanceof HttpUpstreamError && error.status === 401;
+    return error instanceof Utils.HttpUpstreamError && error.status === 401;
 };
 
 // Transition's tokens expire, and become invalid when it restarts, without

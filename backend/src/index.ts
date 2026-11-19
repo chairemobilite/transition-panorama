@@ -1,6 +1,7 @@
 import express from 'express';
+import { Utils } from 'common';
 import { readConfig } from './config';
-import { ApiError, UpstreamError } from './utils/http';
+import { ApiError } from './utils/http';
 import { createPlaceRouter } from './api/place';
 import { createRouteRouter } from './api/route';
 import { createGeocoder } from './geocoder/geocoder-factory';
@@ -41,7 +42,7 @@ app.use(((error, _req, res, _next) => {
         return;
     }
     console.error(error);
-    res.sendStatus(error instanceof UpstreamError ? 502 : 500);
+    res.sendStatus(error instanceof Utils.UpstreamError ? 502 : 500);
 }) satisfies express.ErrorRequestHandler);
 
 app.listen(config.private.port);

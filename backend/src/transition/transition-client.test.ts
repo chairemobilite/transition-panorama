@@ -9,7 +9,7 @@ import {
     it,
     vi,
 } from 'vitest';
-import { HttpUpstreamError } from '../utils/http';
+import { Utils } from 'common';
 import { TransitionClient } from './transition-client';
 import { fakeTransitionUrl } from './transition.test-utils';
 
@@ -125,7 +125,7 @@ describe('authentication', () => {
         });
         const client = await TransitionClient.create(credentials);
         await expect(client.fetchScenarios()).rejects.toBeInstanceOf(
-            HttpUpstreamError,
+            Utils.HttpUpstreamError,
         );
         expect(spies.tokenEndpoint).toHaveBeenCalledTimes(1);
     });

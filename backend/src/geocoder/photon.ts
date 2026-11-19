@@ -1,10 +1,5 @@
 import { type Api, Utils } from 'common';
 import { z } from 'zod';
-import {
-    fetchUpstream,
-    HttpUpstreamError,
-    parseUpstreamResponse,
-} from '../utils/http';
 import type { Geocoder } from './geocoder';
 
 // Photon's answers, with only the fields we use
@@ -122,16 +117,16 @@ export class PhotonGeocoder implements Geocoder {
     }
 
     private async fetchPlaces(path: string, params: URLSearchParams) {
-        const response = await fetchUpstream(() =>
+        const response = await Utils.fetchUpstream(() =>
             fetch(`${this.url}/${path}?${params.toString()}`),
         );
         if (!response.ok) {
-            throw new HttpUpstreamError({
+            throw new Utils.HttpUpstreamError({
                 status: response.status,
                 data: await response.text(),
             });
         }
-        const { features } = parseUpstreamResponse(
+        const { features } = Utils.parseUpstreamResponse(
             FeatureCollectionSchema,
             await response.json(),
         );
