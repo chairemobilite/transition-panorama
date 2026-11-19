@@ -42,6 +42,7 @@
         "@turf/turf": "^7.4.0",
         "common": "workspace:*",
         "express": "^5.2.1",
+        "geocoder": "workspace:*",
         "yaml": "^2.9.1",
         "zod": "4.6.5"
     }

@@ -1,10 +1,10 @@
 import express from 'express';
 import { Utils } from 'common';
+import { createGeocoder } from 'geocoder';
 import { readConfig } from './config';
 import { ApiError } from './utils/http';
 import { createPlaceRouter } from './api/place';
 import { createRouteRouter } from './api/route';
-import { createGeocoder } from '../../geocoder/src/geocoder-factory';
 import { RouteFetcher } from './routing/routes/fetch-routes';
 import { ScenarioIds } from './routing/routes/scenario-ids';
 import { TransitionClient } from './transition/transition-client';

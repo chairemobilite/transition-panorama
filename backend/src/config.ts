@@ -1,8 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { PublicConfig } from 'common';
+import { geocoderProviderNames } from 'geocoder';
 import * as YAML from 'yaml';
 import { z } from 'zod';
-import { geocoderProviderNames } from '../../geocoder/src/geocoder-provider-names';
 
 const publicConfigFileName = 'config.public.yaml';
 

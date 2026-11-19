@@ -1,0 +1,41 @@
+{
+    "name": "geocoder",
+    "version": "0.0.0",
+    "private": true,
+    "license": "MIT",
+    "type": "module",
+    "scripts": {
+        "check": "yarn check:format && yarn check:lint && yarn test && tsc --noEmit",
+        "check:format": "prettier . --check",
+        "check:lint": "eslint .",
+        "fix": "yarn fix:lint && yarn fix:format",
+        "fix:format": "prettier . -w",
+        "fix:lint": "eslint . --fix",
+        "test": "vitest run",
+        "test:coverage": "vitest run --coverage"
+    },
+    "exports": {
+        ".": {
+            "types": "./src/index.ts",
+            "default": "./src/index.ts"
+        }
+    },
+    "dependencies": {
+        "common": "workspace:*",
+        "zod": "4.6.5"
+    },
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "@eslint/markdown": "^8.0.3",
+        "@tsconfig/strictest": "2.0.8",
+        "@vitest/coverage-v8": "^5.0.3",
+        "eslint": "^10.11.0",
+        "globals": "^17.12.0",
+        "jiti": "^2.7.0",
+        "msw": "^2.15.0",
+        "prettier": "3.9.9",
+        "typescript": "6.0.3",
+        "typescript-eslint": "^8.70.1",
+        "vitest": "^5.0.3"
+    }
+}
