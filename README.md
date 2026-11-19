@@ -47,3 +47,7 @@ Run from the repository's root, with `yarn <command>`.
 | `start`         | Runs the built project.                         |
 | `test`          | Runs the tests.                                 |
 | `test:coverage` | Runs the tests and reports the code they cover. |
+
+## Development tools
+
+- [Geocoder comparison](./geocoder/README.md#comparison-tool): compares what the geocoders find.

@@ -4,7 +4,8 @@
         "lib": ["es2023", "dom"],
         "module": "preserve",
         "moduleResolution": "bundler",
+        "jsx": "react-jsx",
         "noEmit": true
     },
-    "include": ["src", "*.ts"]
+    "include": ["src", "playground", "*.ts"]
 }
