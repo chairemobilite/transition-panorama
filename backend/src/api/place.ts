@@ -1,6 +1,6 @@
 import express from 'express';
 import { Api } from 'common';
-import type { Geocoder } from '../geocoder/geocoder';
+import type { Geocoder } from '../../../geocoder/src/geocoder';
 import { ApiError, parseRequest } from '../utils/http';
 
 export const createPlaceRouter = (geocoder: Geocoder) => {
