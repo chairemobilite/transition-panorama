@@ -1,16 +1,17 @@
-import type { PrivateConfig } from '../config';
 import type { Geocoder } from './geocoder';
+import type { GeocoderProviderName } from './geocoder-provider-names';
 import { PeliasGeocoder } from './pelias';
 import { PhotonGeocoder } from './photon';
-
-type GeocoderConfig = PrivateConfig['geocoder'];
 
 const geocoderClasses = {
     pelias: PeliasGeocoder,
     photon: PhotonGeocoder,
-} satisfies Record<GeocoderConfig['provider'], new (url: string) => Geocoder>;
+} satisfies Record<GeocoderProviderName, new (url: string) => Geocoder>;
 
-export const createGeocoder = (geocoderConfig: GeocoderConfig): Geocoder => {
-    const GeocoderClass = geocoderClasses[geocoderConfig.provider];
-    return new GeocoderClass(geocoderConfig.url);
+export const createGeocoder = (
+    providerName: GeocoderProviderName,
+    url: string,
+): Geocoder => {
+    const GeocoderClass = geocoderClasses[providerName];
+    return new GeocoderClass(url);
 };

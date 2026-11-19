@@ -11,7 +11,10 @@ import { TransitionClient } from './transition/transition-client';
 
 const config = readConfig();
 const app = express();
-const geocoder = createGeocoder(config.private.geocoder);
+const geocoder = createGeocoder(
+    config.private.geocoder.provider,
+    config.private.geocoder.url,
+);
 const transition = await TransitionClient.create(config.private.transition);
 // Found at startup, so that a wrong name in the config stops the backend
 const scenarioIds = new ScenarioIds(
