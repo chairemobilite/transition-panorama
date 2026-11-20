@@ -5,3 +5,5 @@ geocoders:
     - name: Photon, public instance
       provider: photon
       url: https://photon.komoot.io
+# Identifies you to the public APIs
+userAgent: geocoder-playground (your@email)

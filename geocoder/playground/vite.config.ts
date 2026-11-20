@@ -20,6 +20,7 @@ const ConfigSchema = z.object({
             url: z.url(),
         }),
     ),
+    userAgent: z.string().min(1),
 });
 
 type Config = z.infer<typeof ConfigSchema>;
@@ -46,6 +47,7 @@ const createProxy = (config: Config): Record<string, ProxyOptions> => {
                     target: geocoder.url,
                     changeOrigin: true,
                     rewrite: (path) => path.slice(proxyPath.length),
+                    headers: { 'User-Agent': config.userAgent },
                 },
             ];
         }),
