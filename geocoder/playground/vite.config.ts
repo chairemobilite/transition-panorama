@@ -18,6 +18,7 @@ const ConfigSchema = z.object({
             name: z.string().min(1),
             provider: z.enum(geocoderProviderNames),
             url: z.url(),
+            throttleMs: z.number().int().positive().default(300),
         }),
     ),
     userAgent: z.string().min(1),
@@ -60,6 +61,7 @@ const createGeocoderConfigs = (config: Config): GeocoderConfig[] => {
             name: geocoder.name,
             providerName: geocoder.provider,
             url: createProxyPath(index),
+            throttleMs: geocoder.throttleMs,
         };
     });
 };

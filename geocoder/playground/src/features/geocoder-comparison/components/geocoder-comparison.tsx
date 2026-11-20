@@ -1,14 +1,9 @@
 import { useState } from 'react';
-import { useDebounce } from 'use-debounce';
 import { geocoderConfigs } from '../../../config/geocoder-configs';
 import GeocoderColumn from './geocoder-column';
 
 const GeocoderComparison = () => {
     const [text, setText] = useState('');
-    const [throttledText] = useDebounce(text, 300, {
-        leading: true,
-        maxWait: 300,
-    });
 
     return (
         <main className="flex flex-col gap-4 p-4">
@@ -27,7 +22,7 @@ const GeocoderComparison = () => {
                     <GeocoderColumn
                         key={geocoderConfig.url}
                         geocoderConfig={geocoderConfig}
-                        text={throttledText}
+                        text={text}
                     />
                 ))}
             </div>

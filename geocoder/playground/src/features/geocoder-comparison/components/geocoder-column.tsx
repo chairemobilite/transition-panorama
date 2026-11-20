@@ -1,3 +1,4 @@
+import { useDebounce } from 'use-debounce';
 import type { GeocoderConfig } from '../../../config/geocoder-configs';
 import { usePlaceSearchQuery } from '../api/place-search';
 
@@ -8,11 +9,15 @@ interface GeocoderColumnProps {
 
 const GeocoderColumn = (props: GeocoderColumnProps) => {
     const { geocoderConfig, text } = props;
+    const [throttledText] = useDebounce(text, geocoderConfig.throttleMs, {
+        leading: true,
+        maxWait: geocoderConfig.throttleMs,
+    });
     const {
         data: places = [],
         error,
         isFetching,
-    } = usePlaceSearchQuery(geocoderConfig, text);
+    } = usePlaceSearchQuery(geocoderConfig, throttledText);
 
     return (
         <section className="flex min-w-80 flex-1 flex-col gap-2">
