@@ -2,8 +2,13 @@ geocoders:
     - name: Pelias, local
       provider: pelias
       url: http://localhost:4000/v1
-    - name: Photon, public instance
+    - name: Photon, public
       provider: photon
       url: https://photon.komoot.io
+    - name: Nominatim, public
+      provider: nominatim
+      url: https://nominatim.openstreetmap.org
+      # At most 1 request per second: https://operations.osmfoundation.org/policies/nominatim/
+      throttleMs: 1500
 # Identifies you to the public APIs
 userAgent: geocoder-playground (your@email)

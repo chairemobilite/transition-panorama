@@ -4,5 +4,6 @@ export {
     type GeocoderProviderName,
     geocoderProviderNames,
 } from './geocoder-provider-names';
+export { NominatimGeocoder } from './nominatim';
 export { PeliasGeocoder } from './pelias';
 export { PhotonGeocoder } from './photon';
