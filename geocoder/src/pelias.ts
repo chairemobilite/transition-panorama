@@ -1,6 +1,6 @@
 import { Utils } from 'common';
 import { z } from 'zod';
-import type { Geocoder, Place, PlaceSearch } from './geocoder';
+import type { Geocoder, GeocoderOptions, Place, PlaceSearch } from './geocoder';
 
 // Pelias' answers, with only the fields we use
 // https://github.com/pelias/documentation/blob/master/autocomplete.md
@@ -49,7 +49,10 @@ const createPlace = (feature: Feature): Place => {
 };
 
 export class PeliasGeocoder implements Geocoder {
-    constructor(private readonly url: string) {}
+    constructor(
+        private readonly url: string,
+        private readonly options: GeocoderOptions = {},
+    ) {}
 
     async searchPlaces(search: PlaceSearch): Promise<Place[]> {
         const features = await this.fetchFeatures(
@@ -80,9 +83,11 @@ export class PeliasGeocoder implements Geocoder {
                 data: await response.text(),
             });
         }
+        const data: unknown = await response.json();
+        this.options.onResponse?.(data);
         const { features } = Utils.parseUpstreamResponse(
             FeatureCollectionSchema,
-            await response.json(),
+            data,
         );
         return features;
     }

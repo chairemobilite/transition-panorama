@@ -1,6 +1,6 @@
 import { Utils } from 'common';
 import { z } from 'zod';
-import type { Geocoder, Place, PlaceSearch } from './geocoder';
+import type { Geocoder, GeocoderOptions, Place, PlaceSearch } from './geocoder';
 
 // Photon's answers, with only the fields we use
 // https://github.com/komoot/photon#search-and-geocoding-api
@@ -126,7 +126,10 @@ export const groupFeatures = (features: Feature[]) => {
 };
 
 export class PhotonGeocoder implements Geocoder {
-    constructor(private readonly url: string) {}
+    constructor(
+        private readonly url: string,
+        private readonly options: GeocoderOptions = {},
+    ) {}
 
     async searchPlaces(search: PlaceSearch): Promise<Place[]> {
         return this.fetchPlaces('api', createSearchParams(search));
@@ -155,9 +158,11 @@ export class PhotonGeocoder implements Geocoder {
                 data: await response.text(),
             });
         }
+        const data: unknown = await response.json();
+        this.options.onResponse?.(data);
         const { features } = Utils.parseUpstreamResponse(
             FeatureCollectionSchema,
-            await response.json(),
+            data,
         );
         return groupFeatures(features)
             .map((group) => {

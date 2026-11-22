@@ -17,7 +17,7 @@ const GeocoderComparison = () => {
                 }}
                 className="rounded border border-gray-300 px-3 py-2"
             />
-            <div className="flex gap-4 overflow-x-auto">
+            <div className="flex gap-4">
                 {geocoderConfigs.map((geocoderConfig) => (
                     <GeocoderColumn
                         key={geocoderConfig.url}

@@ -110,6 +110,20 @@ describe('lookUpPlace', () => {
     });
 });
 
+describe('onResponse', () => {
+    it('receives the answer as it came', async () => {
+        setUpFakeEndpoint('autocomplete', [feature]);
+        const onResponse = vi.fn();
+        await new PeliasGeocoder(peliasUrl, { onResponse }).searchPlaces({
+            text: 'text',
+        });
+        expect(onResponse).toHaveBeenCalledWith({
+            type: 'FeatureCollection',
+            features: [feature],
+        });
+    });
+});
+
 describe('errors', () => {
     it('throws an HttpUpstreamError with the HTTP error', async () => {
         server.use(

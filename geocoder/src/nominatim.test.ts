@@ -65,10 +65,9 @@ describe('searchPlaces', () => {
     it('sends the text, and a box around the focus', async () => {
         const searchEndpointSpy = setUpFakeEndpoint('search', []);
         const focusBoxHalfSizeDegrees = 1;
-        await new NominatimGeocoder(
-            nominatimUrl,
+        await new NominatimGeocoder(nominatimUrl, {
             focusBoxHalfSizeDegrees,
-        ).searchPlaces({ text: 'text', focus: { lng: 1, lat: 10 } });
+        }).searchPlaces({ text: 'text', focus: { lng: 1, lat: 10 } });
         expect(searchEndpointSpy).toHaveBeenCalledWith({
             q: 'text',
             format: 'geojson',
@@ -88,10 +87,9 @@ describe('searchPlaces', () => {
     it('cuts the box at the poles and the antimeridian', async () => {
         const searchEndpointSpy = setUpFakeEndpoint('search', []);
         const focusBoxHalfSizeDegrees = 1;
-        await new NominatimGeocoder(
-            nominatimUrl,
+        await new NominatimGeocoder(nominatimUrl, {
             focusBoxHalfSizeDegrees,
-        ).searchPlaces({ text: 'text', focus: { lng: 180, lat: -90 } });
+        }).searchPlaces({ text: 'text', focus: { lng: 180, lat: -90 } });
         expect(searchEndpointSpy).toHaveBeenCalledWith(
             expect.objectContaining({ viewbox: '179,-90,180,-89' }),
         );
@@ -151,6 +149,20 @@ describe('lookUpPlace', () => {
         const lookupEndpointSpy = setUpFakeEndpoint('lookup', []);
         expect(await geocoder.lookUpPlace('W3x')).toBe(null);
         expect(lookupEndpointSpy).not.toHaveBeenCalled();
+    });
+});
+
+describe('onResponse', () => {
+    it('receives the answer as it came', async () => {
+        setUpFakeEndpoint('search', [feature]);
+        const onResponse = vi.fn();
+        await new NominatimGeocoder(nominatimUrl, { onResponse }).searchPlaces({
+            text: 'text',
+        });
+        expect(onResponse).toHaveBeenCalledWith({
+            type: 'FeatureCollection',
+            features: [feature],
+        });
     });
 });
 

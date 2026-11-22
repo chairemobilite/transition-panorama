@@ -1,16 +1,29 @@
 import { queryOptions, skipToken, useQuery } from '@tanstack/react-query';
 import { createGeocoder } from '../../../../../src';
 import type { GeocoderConfig } from '../../../config/geocoder-configs';
+import {
+    matchPlaces,
+    rawGroupFinders,
+    type SearchResults,
+} from '../utils/raw-results';
 
 const fetchPlaceSearch = async (
     geocoderConfig: GeocoderConfig,
     text: string,
-) => {
+): Promise<SearchResults> => {
+    let response: unknown;
     const geocoder = createGeocoder(
         geocoderConfig.providerName,
         geocoderConfig.url,
+        {
+            onResponse: (data) => {
+                response = data;
+            },
+        },
     );
-    return geocoder.searchPlaces({ text });
+    const places = await geocoder.searchPlaces({ text });
+    const rawGroups = rawGroupFinders[geocoderConfig.providerName](response);
+    return matchPlaces(rawGroups, places);
 };
 
 export const createPlaceSearchQueryOptions = (
@@ -25,8 +38,8 @@ export const createPlaceSearchQueryOptions = (
             : skipToken,
         // The previous results stay while typing, but not once the text is
         // erased
-        placeholderData: (previousPlaces) => {
-            return trimmedText ? previousPlaces : undefined;
+        placeholderData: (previousResults) => {
+            return trimmedText ? previousResults : undefined;
         },
         staleTime: Infinity,
     });

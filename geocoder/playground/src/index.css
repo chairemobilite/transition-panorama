@@ -1,1 +1,6 @@
 @import 'tailwindcss';
+
+/* So that opening raw results doesn't narrow the columns and move the lines */
+html {
+    scrollbar-gutter: stable;
+}

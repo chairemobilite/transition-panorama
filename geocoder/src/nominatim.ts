@@ -1,6 +1,6 @@
 import { Utils } from 'common';
 import { z } from 'zod';
-import type { Geocoder, Place, PlaceSearch } from './geocoder';
+import type { Geocoder, GeocoderOptions, Place, PlaceSearch } from './geocoder';
 
 // Nominatim's answers, with only the fields we use
 // https://nominatim.org/release-docs/latest/api/Search/
@@ -93,19 +93,29 @@ const createPlace = (feature: Feature): Place | null => {
     };
 };
 
+const defaultFocusBoxHalfSizeDegrees = 0.5;
+
+interface NominatimGeocoderOptions {
+    onResponse?: GeocoderOptions['onResponse'];
+    // Nominatim has no focus point, only a box whose places rank higher: the
+    // box reaches this many degrees of longitude and latitude from the focus.
+    focusBoxHalfSizeDegrees?: number | undefined;
+}
+
 export class NominatimGeocoder implements Geocoder {
     constructor(
         private readonly url: string,
-        // Nominatim has no focus point, only a box whose places rank higher:
-        // the box reaches this many degrees of longitude and latitude from the
-        // focus
-        private readonly focusBoxHalfSizeDegrees = 0.5,
+        private readonly options: NominatimGeocoderOptions = {},
     ) {}
 
     async searchPlaces(search: PlaceSearch): Promise<Place[]> {
         return this.fetchPlaces(
             'search',
-            createSearchParams(search, this.focusBoxHalfSizeDegrees),
+            createSearchParams(
+                search,
+                this.options.focusBoxHalfSizeDegrees ??
+                    defaultFocusBoxHalfSizeDegrees,
+            ),
         );
     }
 
@@ -130,9 +140,11 @@ export class NominatimGeocoder implements Geocoder {
                 data: await response.text(),
             });
         }
+        const data: unknown = await response.json();
+        this.options.onResponse?.(data);
         const { features } = Utils.parseUpstreamResponse(
             FeatureCollectionSchema,
-            await response.json(),
+            data,
         );
         return features.map(createPlace).filter((place) => place !== null);
     }
