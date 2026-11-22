@@ -7,7 +7,7 @@ import type { Geocoder, Place, PlaceSearch } from './geocoder';
 // https://nominatim.org/release-docs/latest/api/Lookup/
 // https://nominatim.org/release-docs/latest/api/Output/
 
-const FeatureSchema = z.object({
+export const FeatureSchema = z.object({
     geometry: z.object({
         coordinates: z.tuple([z.number(), z.number()]),
     }),
@@ -35,12 +35,16 @@ const osmTypePrefixes: Record<string, string> = {
 };
 
 // The OSM reference that lookups take, e.g. "W115802108"
-const createPlaceId = (osmType: string, osmId: number) => {
-    const osmTypePrefix = osmTypePrefixes[osmType];
+export const createPlaceId = (feature: Feature) => {
+    const { properties } = feature;
+    if (properties.osm_type === undefined || properties.osm_id === undefined) {
+        return null;
+    }
+    const osmTypePrefix = osmTypePrefixes[properties.osm_type];
     if (osmTypePrefix === undefined) {
         return null;
     }
-    return `${osmTypePrefix}${osmId}`;
+    return `${osmTypePrefix}${properties.osm_id}`;
 };
 
 const placeIdPattern = /^[NWR]\d+$/;
@@ -75,10 +79,7 @@ const createSearchParams = (
 
 const createPlace = (feature: Feature): Place | null => {
     const { geometry, properties } = feature;
-    if (properties.osm_type === undefined || properties.osm_id === undefined) {
-        return null;
-    }
-    const id = createPlaceId(properties.osm_type, properties.osm_id);
+    const id = createPlaceId(feature);
     if (id === null) {
         return null;
     }

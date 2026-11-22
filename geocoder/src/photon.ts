@@ -5,7 +5,7 @@ import type { Geocoder, Place, PlaceSearch } from './geocoder';
 // Photon's answers, with only the fields we use
 // https://github.com/komoot/photon#search-and-geocoding-api
 
-const FeatureSchema = z.object({
+export const FeatureSchema = z.object({
     geometry: z.object({
         coordinates: z.tuple([z.number(), z.number()]),
     }),
@@ -57,12 +57,13 @@ const createLabel = (properties: Feature['properties']) => {
 
 // Photon can't look up a place by its OSM type and id, so the id also holds
 // the position to find it around, e.g. "W115802108@-73.5674277,45.5004189"
-const createPlaceId = (
-    osmType: string,
-    osmId: number,
-    position: Utils.LngLat,
-) => {
-    return `${osmType}${osmId}@${position.lng},${position.lat}`;
+export const createPlaceId = (feature: Feature) => {
+    const { geometry, properties } = feature;
+    if (properties.osm_type === undefined || properties.osm_id === undefined) {
+        return null;
+    }
+    const [lng, lat] = geometry.coordinates;
+    return `${properties.osm_type}${properties.osm_id}@${lng},${lat}`;
 };
 
 const placeIdPositionPattern = /@([^,@]+),([^,@]+)$/;
@@ -82,17 +83,17 @@ const parsePlaceIdPosition = (id: string): Utils.LngLat | null => {
 
 const createPlace = (feature: Feature): Place | null => {
     const { geometry, properties } = feature;
-    if (properties.osm_type === undefined || properties.osm_id === undefined) {
+    const id = createPlaceId(feature);
+    if (id === null) {
         return null;
     }
-    const position = {
-        lng: geometry.coordinates[0],
-        lat: geometry.coordinates[1],
-    };
     return {
-        id: createPlaceId(properties.osm_type, properties.osm_id, position),
+        id,
         label: createLabel(properties),
-        position,
+        position: {
+            lng: geometry.coordinates[0],
+            lat: geometry.coordinates[1],
+        },
     };
 };
 

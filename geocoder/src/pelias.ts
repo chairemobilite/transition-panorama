@@ -6,7 +6,7 @@ import type { Geocoder, Place, PlaceSearch } from './geocoder';
 // https://github.com/pelias/documentation/blob/master/autocomplete.md
 // https://github.com/pelias/documentation/blob/master/place.md
 
-const FeatureSchema = z.object({
+export const FeatureSchema = z.object({
     geometry: z.object({
         coordinates: z.tuple([z.number(), z.number()]),
     }),
@@ -32,10 +32,14 @@ const createAutocompleteParams = (search: PlaceSearch) => {
     return params;
 };
 
+export const createPlaceId = (feature: Feature) => {
+    return feature.properties.gid;
+};
+
 const createPlace = (feature: Feature): Place => {
     const { geometry, properties } = feature;
     return {
-        id: properties.gid,
+        id: createPlaceId(feature),
         label: properties.label,
         position: {
             lng: geometry.coordinates[0],
