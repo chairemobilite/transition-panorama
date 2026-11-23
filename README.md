@@ -50,4 +50,4 @@ Run from the repository's root, with `yarn <command>`.
 
 ## Development tools
 
-- [Geocoder comparison](./geocoder/README.md#comparison-tool): compares what the geocoders find.
+- [Geocoder comparison](./packages/geocoder/README.md#comparison-tool): compares what the geocoders find.

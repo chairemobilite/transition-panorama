@@ -9,12 +9,12 @@ import { defineConfig, loadEnv, type Plugin } from 'vite';
 import * as YAML from 'yaml';
 import { z } from 'zod';
 
-const envDir = '..';
+const envDir = '../..';
 
 const configFileName = 'config.public.yaml';
 
 const configPath = fileURLToPath(
-    new URL(`../${configFileName}`, import.meta.url),
+    new URL(`../../${configFileName}`, import.meta.url),
 );
 
 const readConfig = (): unknown => {

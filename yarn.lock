@@ -5033,9 +5033,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"backend@workspace:backend":
+"backend@workspace:apps/backend":
   version: 0.0.0-use.local
-  resolution: "backend@workspace:backend"
+  resolution: "backend@workspace:apps/backend"
   dependencies:
     "@eslint/js": "npm:^10.0.1"
     "@eslint/markdown": "npm:^8.0.3"
@@ -5503,9 +5503,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"contract@workspace:*, contract@workspace:contract":
+"contract@workspace:*, contract@workspace:packages/contract":
   version: 0.0.0-use.local
-  resolution: "contract@workspace:contract"
+  resolution: "contract@workspace:packages/contract"
   dependencies:
     "@eslint/js": "npm:^10.0.1"
     "@eslint/markdown": "npm:^8.0.3"
@@ -6556,9 +6556,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"frontend@workspace:frontend":
+"frontend@workspace:apps/frontend":
   version: 0.0.0-use.local
-  resolution: "frontend@workspace:frontend"
+  resolution: "frontend@workspace:apps/frontend"
   dependencies:
     "@babel/core": "npm:^7.29.7"
     "@base-ui/react": "npm:^1.8.0"
@@ -6670,9 +6670,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"geocoder@workspace:*, geocoder@workspace:geocoder":
+"geocoder@workspace:*, geocoder@workspace:packages/geocoder":
   version: 0.0.0-use.local
-  resolution: "geocoder@workspace:geocoder"
+  resolution: "geocoder@workspace:packages/geocoder"
   dependencies:
     "@eslint/js": "npm:^10.0.1"
     "@eslint/markdown": "npm:^8.0.3"
@@ -10510,9 +10510,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"utils@workspace:*, utils@workspace:utils":
+"utils@workspace:*, utils@workspace:packages/utils":
   version: 0.0.0-use.local
-  resolution: "utils@workspace:utils"
+  resolution: "utils@workspace:packages/utils"
   dependencies:
     "@eslint/js": "npm:^10.0.1"
     "@eslint/markdown": "npm:^8.0.3"

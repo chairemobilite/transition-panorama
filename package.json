@@ -2,11 +2,8 @@
   "name": "transition-public",
   "private": true,
   "workspaces": [
-    "backend",
-    "contract",
-    "frontend",
-    "geocoder",
-    "utils"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
     "build": "yarn workspaces foreach --all --exclude transition-public --topological-dev run build",

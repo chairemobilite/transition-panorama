@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 const publicConfigFileName = 'config.public.yaml';
 
-const publicConfigPath = `../${publicConfigFileName}`;
+const publicConfigPath = `../../${publicConfigFileName}`;
 
 const readPublicConfig = (): unknown => {
     if (!existsSync(publicConfigPath)) {

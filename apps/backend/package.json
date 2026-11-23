@@ -9,11 +9,11 @@
         "check:format": "prettier . --check",
         "check:lint": "eslint .",
         "codegen": "orval",
-        "dev": "tsx watch --env-file=../.env --include ../config.public.yaml src/index.ts",
+        "dev": "tsx watch --env-file=../../.env --include ../../config.public.yaml src/index.ts",
         "fix": "yarn fix:lint && yarn fix:format",
         "fix:format": "prettier . -w",
         "fix:lint": "eslint . --fix",
-        "start": "node --env-file=../.env dist/index.js",
+        "start": "node --env-file=../../.env dist/index.js",
         "test": "vitest run",
         "test:coverage": "vitest run --coverage"
     },
