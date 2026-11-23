@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Api, Utils } from 'common';
+import { Api } from 'common';
+import * as Utils from 'utils';
 import { z } from 'zod';
 
 import { config } from '@/config/config';

@@ -1,5 +1,5 @@
 import type { z } from 'zod';
-import { Utils } from 'common';
+import * as Utils from 'utils';
 import { getApiV1Scenarios } from './generated/transitionAPI';
 import * as TransitionSchema from './generated/transitionAPI.zod';
 

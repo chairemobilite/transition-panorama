@@ -1,4 +1,5 @@
-import type { Api, Utils } from 'common';
+import type { Api } from 'common';
+import type * as Utils from 'utils';
 
 import { useRouteQueries } from '@/api/route';
 import SidePanel from '@/components/layouts/side-panel';

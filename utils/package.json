@@ -1,0 +1,36 @@
+{
+    "name": "utils",
+    "version": "0.0.0",
+    "private": true,
+    "license": "MIT",
+    "type": "module",
+    "scripts": {
+        "check": "yarn check:format && yarn check:lint && tsc --noEmit",
+        "check:format": "prettier . --check",
+        "check:lint": "eslint .",
+        "fix": "yarn fix:lint && yarn fix:format",
+        "fix:format": "prettier . -w",
+        "fix:lint": "eslint . --fix"
+    },
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "@eslint/markdown": "^8.0.3",
+        "@tsconfig/strictest": "2.0.8",
+        "eslint": "^10.11.0",
+        "globals": "^17.12.0",
+        "jiti": "^2.7.0",
+        "prettier": "3.9.9",
+        "typescript": "6.0.3",
+        "typescript-eslint": "^8.70.1"
+    },
+    "exports": {
+        ".": {
+            "types": "./src/index.ts",
+            "default": "./src/index.ts"
+        }
+    },
+    "dependencies": {
+        "@types/geojson": "^7946.0.16",
+        "zod": "4.6.5"
+    }
+}

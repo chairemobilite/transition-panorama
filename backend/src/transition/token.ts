@@ -1,4 +1,4 @@
-import { Utils } from 'common';
+import * as Utils from 'utils';
 import { postToken } from './generated/transitionAPI';
 
 export interface TransitionCredentials {

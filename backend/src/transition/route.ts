@@ -1,5 +1,5 @@
 import type { z } from 'zod';
-import { Utils } from 'common';
+import * as Utils from 'utils';
 import { postApiV1Route } from './generated/transitionAPI';
 import * as TransitionSchema from './generated/transitionAPI.zod';
 import type { PostApiV1RouteBody } from './generated/model';

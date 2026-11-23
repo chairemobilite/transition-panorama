@@ -4,7 +4,6 @@ import {
     type MapLayerTouchEvent,
 } from '@vis.gl/react-maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import type { Utils } from 'common';
 import {
     setWorkerUrl,
     type LngLat,
@@ -12,6 +11,7 @@ import {
 } from 'maplibre-gl';
 import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { useRef, useState, type ReactNode } from 'react';
+import type * as Utils from 'utils';
 
 import { config } from '@/config/config';
 import {

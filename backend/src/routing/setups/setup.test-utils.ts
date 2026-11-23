@@ -1,4 +1,5 @@
-import type { Api, PublicConfig, Utils } from 'common';
+import type { Api, PublicConfig } from 'common';
+import type * as Utils from 'utils';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { afterAll, beforeAll, expect } from 'vitest';

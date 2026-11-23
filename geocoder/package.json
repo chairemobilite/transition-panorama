@@ -22,7 +22,7 @@
         }
     },
     "dependencies": {
-        "common": "workspace:*",
+        "utils": "workspace:*",
         "zod": "4.6.5"
     },
     "devDependencies": {

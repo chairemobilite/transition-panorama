@@ -10,8 +10,8 @@ import {
     midpoint,
     nearestPointOnLine,
 } from '@turf/turf';
-import type { Utils } from 'common';
 import type { LineString } from 'geojson';
+import type * as Utils from 'utils';
 
 /** From GeoJSON coordinates, as `[longitude, latitude]`. */
 export const createLngLat = (coordinates: number[]): Utils.LngLat => {

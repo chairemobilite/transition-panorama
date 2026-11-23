@@ -1,5 +1,5 @@
 import { distance } from '@turf/turf';
-import type { Utils } from 'common';
+import type * as Utils from 'utils';
 
 export const createPointFeature = ({ lng, lat }: Utils.LngLat) => ({
     type: 'Feature' as const,

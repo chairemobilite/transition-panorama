@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import * as Utils from '../utils';
+import * as Utils from 'utils';
 
 export const PlaceSearchBodySchema = z.object({
     text: z.string().trim().min(1).max(200),

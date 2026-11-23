@@ -1,4 +1,5 @@
-import { type Api, Utils } from 'common';
+import type { Api } from 'common';
+import * as Utils from 'utils';
 
 import type {
     RouteOrder,

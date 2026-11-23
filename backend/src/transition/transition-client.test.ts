@@ -9,7 +9,7 @@ import {
     it,
     vi,
 } from 'vitest';
-import { Utils } from 'common';
+import * as Utils from 'utils';
 import { TransitionClient } from './transition-client';
 import { fakeTransitionUrl } from './transition.test-utils';
 

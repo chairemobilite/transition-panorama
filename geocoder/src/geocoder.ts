@@ -1,4 +1,4 @@
-import type { Utils } from 'common';
+import type * as Utils from 'utils';
 
 export interface PlaceSearch {
     text: string;

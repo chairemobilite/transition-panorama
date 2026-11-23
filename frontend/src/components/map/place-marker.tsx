@@ -1,5 +1,5 @@
 import { Marker } from '@vis.gl/react-maplibre';
-import type { Utils } from 'common';
+import type * as Utils from 'utils';
 
 import { markerStacking } from '@/utils/marker-stacking';
 

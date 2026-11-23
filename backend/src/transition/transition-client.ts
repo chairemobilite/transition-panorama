@@ -1,4 +1,4 @@
-import { Utils } from 'common';
+import * as Utils from 'utils';
 import {
     postTransitionRoute,
     type TransitionRouteBody,

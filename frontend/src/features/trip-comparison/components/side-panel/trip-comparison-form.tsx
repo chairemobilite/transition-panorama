@@ -3,8 +3,9 @@ import {
     CircleIcon,
     MapPinIcon,
 } from '@phosphor-icons/react';
-import { Api, type Utils } from 'common';
+import { Api } from 'common';
 import { useTranslation } from 'react-i18next';
+import type * as Utils from 'utils';
 
 import PlaceInput from '@/components/inputs/place-input';
 import { Button } from '@/components/ui/button';

@@ -1,7 +1,7 @@
 import { bearing, destination, distance, lengthToDegrees } from '@turf/turf';
-import type { Utils } from 'common';
 import type { LineString } from 'geojson';
 import { useMemo, useState } from 'react';
+import type * as Utils from 'utils';
 
 import type { CalloutPosition } from '@/components/map/map-callout';
 import type { DrawnRoute } from '@/features/trip-comparison/utils/drawn-route';

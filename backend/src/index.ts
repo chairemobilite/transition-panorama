@@ -1,5 +1,5 @@
 import express from 'express';
-import { Utils } from 'common';
+import * as Utils from 'utils';
 import { createGeocoder } from 'geocoder';
 import { readConfig } from './config';
 import { ApiError } from './utils/http';

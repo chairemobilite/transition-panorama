@@ -9,7 +9,7 @@ import {
     it,
     vi,
 } from 'vitest';
-import { Utils } from 'common';
+import * as Utils from 'utils';
 import { PeliasGeocoder } from './pelias';
 
 const peliasUrl = 'http://pelias.test/v1';

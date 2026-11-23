@@ -1,5 +1,6 @@
 import { queryOptions, skipToken, useQueries } from '@tanstack/react-query';
-import { Api, Utils } from 'common';
+import { Api } from 'common';
+import * as Utils from 'utils';
 
 import { config } from '@/config/config';
 

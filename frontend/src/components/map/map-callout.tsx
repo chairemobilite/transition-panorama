@@ -1,8 +1,8 @@
 import { CaretDownIcon } from '@phosphor-icons/react';
 import { Marker } from '@vis.gl/react-maplibre';
-import type { Utils } from 'common';
 import { useRef, type ReactNode } from 'react';
 import { flushSync } from 'react-dom';
+import type * as Utils from 'utils';
 
 import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
 import { useScreenOffset } from '@/hooks/map/use-screen-offset';

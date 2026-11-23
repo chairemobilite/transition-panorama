@@ -1,4 +1,5 @@
-import type { Api, PublicConfig, Utils } from 'common';
+import type { Api, PublicConfig } from 'common';
+import type * as Utils from 'utils';
 import type {
     TransitionRouteBody,
     TransitionRouteResponse,

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import * as Utils from '../utils';
+import * as Utils from 'utils';
 import { ModeSchema } from './mode';
 
 const WalkingToStopStepSchema = z.object({

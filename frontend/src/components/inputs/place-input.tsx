@@ -1,7 +1,8 @@
 import { MapPinIcon, XIcon } from '@phosphor-icons/react';
-import type { Api, Utils } from 'common';
+import type { Api } from 'common';
 import { useRef, useState, type ReactNode } from 'react';
 import { useDebounce } from 'use-debounce';
+import type * as Utils from 'utils';
 
 import {
     useSetPlaceLookupQueryData,
