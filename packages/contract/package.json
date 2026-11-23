@@ -12,10 +12,12 @@
         "fix:format": "prettier . -w",
         "fix:lint": "eslint . --fix"
     },
+    "prettier": "dev-config/prettier",
     "devDependencies": {
         "@eslint/js": "^10.0.1",
         "@eslint/markdown": "^8.0.3",
         "@tsconfig/strictest": "2.0.8",
+        "dev-config": "workspace:*",
         "eslint": "^10.11.0",
         "globals": "^17.12.0",
         "jiti": "^2.7.0",

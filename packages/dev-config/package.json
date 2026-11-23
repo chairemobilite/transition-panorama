@@ -1,0 +1,20 @@
+{
+    "name": "dev-config",
+    "version": "0.0.0",
+    "private": true,
+    "license": "MIT",
+    "type": "module",
+    "scripts": {
+        "check": "yarn check:format",
+        "check:format": "prettier . --check",
+        "fix": "yarn fix:format",
+        "fix:format": "prettier . -w"
+    },
+    "exports": {
+        "./prettier": "./prettier.json"
+    },
+    "prettier": "./prettier.json",
+    "devDependencies": {
+        "prettier": "3.9.9"
+    }
+}
