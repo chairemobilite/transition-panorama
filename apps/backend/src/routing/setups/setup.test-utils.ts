@@ -1,8 +1,9 @@
 import type { Api, PublicConfig } from 'contract';
-import type * as Utils from 'utils';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
+import type * as Utils from 'utils';
 import { afterAll, beforeAll, expect } from 'vitest';
+
 import type {
     TransitionRouteBody,
     TransitionRouteResponse,

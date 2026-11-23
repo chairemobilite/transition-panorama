@@ -1,6 +1,8 @@
 import type { PublicConfig } from 'contract';
 import { expect, it } from 'vitest';
+
 import type { TransitionScenario } from '../../transition/scenarios';
+
 import { ScenarioIds } from './scenario-ids';
 
 const createScenario = (id: string, name: string) => {

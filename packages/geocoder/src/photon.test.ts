@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
+import * as Utils from 'utils';
 import {
     afterAll,
     afterEach,
@@ -9,7 +10,7 @@ import {
     it,
     vi,
 } from 'vitest';
-import * as Utils from 'utils';
+
 import { PhotonGeocoder } from './photon';
 
 const photonUrl = 'http://photon.test';

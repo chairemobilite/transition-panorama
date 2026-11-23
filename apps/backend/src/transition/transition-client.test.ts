@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
+import * as Utils from 'utils';
 import {
     afterAll,
     afterEach,
@@ -9,7 +10,7 @@ import {
     it,
     vi,
 } from 'vitest';
-import * as Utils from 'utils';
+
 import { TransitionClient } from './transition-client';
 import { fakeTransitionUrl } from './transition.test-utils';
 

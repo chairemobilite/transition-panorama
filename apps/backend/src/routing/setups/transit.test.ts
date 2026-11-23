@@ -1,5 +1,6 @@
 import type { PublicConfig } from 'contract';
 import { it } from 'vitest';
+
 import {
     createRouteFetcherForFakeTransition,
     expectStepsToConnect,

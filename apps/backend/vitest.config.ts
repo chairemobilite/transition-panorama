@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config';
+
 import { fakeTransitionUrl } from './src/transition/transition.test-utils';
 
 export default defineConfig({

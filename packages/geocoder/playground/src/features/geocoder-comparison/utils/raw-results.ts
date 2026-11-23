@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import type { GeocoderProviderName, Place } from '../../../../../src';
 import * as Nominatim from '../../../../../src/nominatim';
 import * as Pelias from '../../../../../src/pelias';

@@ -1,7 +1,9 @@
 import type { Api, PublicConfig } from 'contract';
-import { fetchStepsViaStations, findClosestStation } from './via-stations';
-import type { OdTrip, RouteFetcher } from '../routes/fetch-routes';
+
 import { calculateDistanceMeters } from '../../utils/geo';
+import type { OdTrip, RouteFetcher } from '../routes/fetch-routes';
+
+import { fetchStepsViaStations, findClosestStation } from './via-stations';
 
 type Airport = PublicConfig.PlaneNetwork['airports'][number];
 

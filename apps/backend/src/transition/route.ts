@@ -1,8 +1,9 @@
-import type { z } from 'zod';
 import * as Utils from 'utils';
+import type { z } from 'zod';
+
+import type { PostApiV1RouteBody } from './generated/model';
 import { postApiV1Route } from './generated/transitionAPI';
 import * as TransitionSchema from './generated/transitionAPI.zod';
-import type { PostApiV1RouteBody } from './generated/model';
 
 export type TransitionRouteBody = PostApiV1RouteBody;
 

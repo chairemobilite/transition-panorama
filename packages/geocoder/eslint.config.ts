@@ -1,46 +1,14 @@
-import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import markdown from '@eslint/markdown';
+import { createBaseConfig } from 'dev-config/eslint';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 
 export default defineConfig([
     globalIgnores(['coverage']),
+    createBaseConfig(new URL('.', import.meta.url).pathname),
+    { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
     {
-        files: ['**/*.{js,mjs,cjs,ts,mts,cts,tsx}'],
-        plugins: { js },
-        extends: [
-            'js/recommended',
-            tseslint.configs.strictTypeChecked,
-            tseslint.configs.stylisticTypeChecked,
-            reactHooks.configs.flat.recommended,
-        ],
-        languageOptions: {
-            globals: { ...globals.browser, ...globals.node },
-            parserOptions: {
-                projectService: true,
-                tsconfigRootDir: new URL('.', import.meta.url).pathname,
-            },
-        },
-        rules: {
-            '@typescript-eslint/restrict-template-expressions': [
-                'error',
-                {
-                    allowAny: false,
-                    allowBoolean: false,
-                    allowNever: false,
-                    allowNullish: false,
-                    allowNumber: true,
-                    allowRegExp: false,
-                },
-            ],
-        },
-    },
-    {
-        files: ['**/*.md'],
-        plugins: { markdown },
-        language: 'markdown/commonmark',
-        extends: ['markdown/recommended'],
+        files: ['**/*.{ts,tsx}'],
+        extends: [reactHooks.configs.flat.recommended],
     },
 ]);

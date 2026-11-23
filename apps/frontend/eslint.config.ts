@@ -1,71 +1,22 @@
-import js from '@eslint/js';
 import pluginRouter from '@tanstack/eslint-plugin-router';
+import { createBaseConfig } from 'dev-config/eslint';
 import { defineConfig, globalIgnores } from 'eslint/config';
-import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import betterTailwindcss from 'eslint-plugin-better-tailwindcss';
-import checkFile from 'eslint-plugin-check-file';
-import { importX } from 'eslint-plugin-import-x';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
-import tseslint from 'typescript-eslint';
 
 export default defineConfig([
     globalIgnores(['dist']),
+    createBaseConfig(new URL('.', import.meta.url).pathname),
     {
         files: ['**/*.{js,ts,tsx}'],
         extends: [
-            js.configs.recommended,
-            tseslint.configs.strictTypeChecked,
-            tseslint.configs.stylisticTypeChecked,
             reactHooks.configs.flat.recommended,
             reactRefresh.configs.vite,
         ],
-        languageOptions: {
-            globals: globals.browser,
-            parserOptions: {
-                projectService: true,
-                tsconfigRootDir: new URL('.', import.meta.url).pathname,
-            },
-        },
-        plugins: { 'import-x': importX },
-        settings: {
-            // Reads tsconfig paths so @/ imports count as internal.
-            'import-x/resolver-next': [
-                createTypeScriptImportResolver({
-                    project: new URL('tsconfig.app.json', import.meta.url)
-                        .pathname,
-                }),
-            ],
-        },
+        languageOptions: { globals: globals.browser },
         rules: {
-            '@typescript-eslint/restrict-template-expressions': [
-                'error',
-                {
-                    allowAny: false,
-                    allowBoolean: false,
-                    allowNever: false,
-                    allowNullish: false,
-                    allowNumber: true,
-                    allowRegExp: false,
-                },
-            ],
-            'import-x/order': [
-                'error',
-                {
-                    groups: [
-                        'builtin',
-                        'external',
-                        'internal',
-                        'parent',
-                        'sibling',
-                        'index',
-                        'object',
-                    ],
-                    'newlines-between': 'always',
-                    alphabetize: { order: 'asc', caseInsensitive: true },
-                },
-            ],
             'no-restricted-imports': [
                 'error',
                 {
@@ -108,20 +59,11 @@ export default defineConfig([
         },
     },
     {
-        files: ['src/**/*.{ts,tsx}'],
         // TanStack Router picks these names (e.g. __root.tsx, routeTree.gen.ts).
-        ignores: ['src/app/routes/**', 'src/app/routeTree.gen.ts'],
-        plugins: { 'check-file': checkFile },
+        files: ['src/app/routes/**', 'src/app/routeTree.gen.ts'],
         rules: {
-            'check-file/filename-naming-convention': [
-                'error',
-                { '**/*.{ts,tsx}': 'KEBAB_CASE' },
-                { ignoreMiddleExtensions: true },
-            ],
-            'check-file/folder-naming-convention': [
-                'error',
-                { 'src/**/': 'KEBAB_CASE' },
-            ],
+            'check-file/filename-naming-convention': 'off',
+            'check-file/folder-naming-convention': 'off',
         },
     },
     ...pluginRouter.configs['flat/recommended'],

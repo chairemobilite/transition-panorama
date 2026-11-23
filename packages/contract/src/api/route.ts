@@ -1,6 +1,6 @@
+import * as Utils from 'utils';
 import { z } from 'zod';
 
-import * as Utils from 'utils';
 import { RouteStepSchema } from './route-steps';
 
 export const TripTimeTypeSchema = z.enum(['departure', 'arrival']);

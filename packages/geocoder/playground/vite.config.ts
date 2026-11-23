@@ -1,11 +1,14 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig, type Plugin, type ProxyOptions } from 'vite';
 import * as YAML from 'yaml';
 import { z } from 'zod';
+
 import { geocoderProviderNames } from '../src/geocoder-provider-names';
+
 import type { GeocoderConfig } from './src/config/geocoder-configs';
 
 const configFileName = 'config.yaml';

@@ -1,7 +1,8 @@
 import type { Api, PublicConfig } from 'contract';
 import * as Utils from 'utils';
-import type { OdTrip, RouteFetcher } from '../routes/fetch-routes';
+
 import { calculateDistanceMeters } from '../../utils/geo';
+import type { OdTrip, RouteFetcher } from '../routes/fetch-routes';
 
 // For trips that go through stations, like airports or train stations
 interface Station {

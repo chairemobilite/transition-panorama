@@ -1,6 +1,8 @@
 import { useDebounce } from 'use-debounce';
+
 import type { GeocoderConfig } from '../../../config/geocoder-configs';
 import { usePlaceSearchQuery } from '../api/place-search';
+
 import SearchResultItem from './search-result-item';
 
 interface GeocoderColumnProps {

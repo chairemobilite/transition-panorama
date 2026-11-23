@@ -1,7 +1,7 @@
+import * as Utils from 'utils';
 import { z } from 'zod';
 
 import { ModeSchema } from './api/mode';
-import * as Utils from 'utils';
 
 const MapConfigSchema = z.object({
     defaultCamera: Utils.MapCameraSchema,

@@ -1,4 +1,5 @@
 import { queryOptions, skipToken, useQuery } from '@tanstack/react-query';
+
 import { createGeocoder } from '../../../../../src';
 import type { GeocoderConfig } from '../../../config/geocoder-configs';
 import {

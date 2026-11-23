@@ -1,5 +1,7 @@
-import express from 'express';
 import { Api, type PublicConfig } from 'contract';
+import express from 'express';
+
+import type { RouteFetcher } from '../routing/routes/fetch-routes';
 import {
     fetchPlaneTransitSetupRoute,
     fetchPlaneUnimodalSetupRoute,
@@ -7,7 +9,6 @@ import {
 import { fetchTransitSetupRoute } from '../routing/setups/transit';
 import { fetchUnimodalSetupRoute } from '../routing/setups/unimodal';
 import { fetchViaStationsSetupRoute } from '../routing/setups/via-stations';
-import type { RouteFetcher } from '../routing/routes/fetch-routes';
 import { ApiError, parseRequest } from '../utils/http';
 
 const getRoutingSetup = (

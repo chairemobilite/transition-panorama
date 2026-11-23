@@ -1,5 +1,7 @@
 import { useState } from 'react';
+
 import { geocoderConfigs } from '../../../config/geocoder-configs';
+
 import GeocoderColumn from './geocoder-column';
 
 const GeocoderComparison = () => {

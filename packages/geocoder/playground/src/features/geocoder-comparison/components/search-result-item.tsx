@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import type { SearchResult } from '../utils/raw-results';
 
 interface SearchResultItemProps {

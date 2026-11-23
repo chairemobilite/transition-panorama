@@ -1,13 +1,14 @@
 import express from 'express';
-import * as Utils from 'utils';
 import { createGeocoder } from 'geocoder';
-import { readConfig } from './config';
-import { ApiError } from './utils/http';
+import * as Utils from 'utils';
+
 import { createPlaceRouter } from './api/place';
 import { createRouteRouter } from './api/route';
+import { readConfig } from './config';
 import { RouteFetcher } from './routing/routes/fetch-routes';
 import { ScenarioIds } from './routing/routes/scenario-ids';
 import { TransitionClient } from './transition/transition-client';
+import { ApiError } from './utils/http';
 
 const config = readConfig();
 const app = express();

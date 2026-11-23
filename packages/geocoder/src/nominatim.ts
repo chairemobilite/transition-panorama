@@ -1,5 +1,6 @@
 import * as Utils from 'utils';
 import { z } from 'zod';
+
 import type { Geocoder, GeocoderOptions, Place, PlaceSearch } from './geocoder';
 
 // Nominatim's answers, with only the fields we use

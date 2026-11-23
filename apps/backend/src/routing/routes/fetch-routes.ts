@@ -1,16 +1,18 @@
 import type { Api, PublicConfig } from 'contract';
 import type * as Utils from 'utils';
+
 import type {
     TransitionRouteBody,
     TransitionRouteResponse,
 } from '../../transition/route';
 import type { TransitionClient } from '../../transition/transition-client';
 import { createPointFeature } from '../../utils/geo';
-import type { ScenarioIds } from './scenario-ids';
+
 import {
     createTransitRouteSteps,
     createUnimodalRouteSteps,
 } from './route-steps';
+import type { ScenarioIds } from './scenario-ids';
 
 export interface OdTrip {
     origin: Utils.LngLat;

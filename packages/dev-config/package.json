@@ -5,16 +5,37 @@
     "license": "MIT",
     "type": "module",
     "scripts": {
-        "check": "yarn check:format",
+        "check": "yarn check:format && yarn check:lint && tsc --noEmit",
         "check:format": "prettier . --check",
-        "fix": "yarn fix:format",
-        "fix:format": "prettier . -w"
+        "check:lint": "eslint .",
+        "fix": "yarn fix:lint && yarn fix:format",
+        "fix:format": "prettier . -w",
+        "fix:lint": "eslint . --fix"
     },
     "exports": {
+        "./eslint": "./eslint.ts",
         "./prettier": "./prettier.json"
     },
     "prettier": "./prettier.json",
+    "dependencies": {
+        "@eslint/js": "^10.0.1",
+        "@eslint/markdown": "^8.0.3",
+        "eslint-import-resolver-typescript": "^4.4.5",
+        "eslint-plugin-check-file": "^3.3.2",
+        "eslint-plugin-import-x": "^4.17.1",
+        "typescript-eslint": "^8.70.1"
+    },
+    "peerDependencies": {
+        "eslint": "^10.0.0",
+        "typescript": "^6.0.0"
+    },
     "devDependencies": {
-        "prettier": "3.9.9"
+        "@tsconfig/strictest": "2.0.8",
+        "@types/node": "26.6.2",
+        "eslint": "^10.11.0",
+        "globals": "^17.12.0",
+        "jiti": "^2.7.0",
+        "prettier": "3.9.9",
+        "typescript": "6.0.3"
     }
 }

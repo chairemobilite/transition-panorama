@@ -1,4 +1,5 @@
 import { build } from 'esbuild';
+
 import packageJson from './package.json' with { type: 'json' };
 
 // Workspaces whose TypeScript sources must be compiled into the bundle
