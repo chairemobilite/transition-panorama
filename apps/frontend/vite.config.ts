@@ -79,7 +79,6 @@ export default defineConfig(({ command, mode }) => {
         resolve: {
             alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
         },
-        envDir,
         define: { __CONFIG__: readBrowserConfig() },
         server:
             command === 'serve'
