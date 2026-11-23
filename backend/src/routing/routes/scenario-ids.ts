@@ -1,4 +1,4 @@
-import type { PublicConfig } from 'common';
+import type { PublicConfig } from 'contract';
 import type { TransitionScenario } from '../../transition/scenarios';
 
 const findScenarioId = (scenarios: TransitionScenario[], name: string) => {

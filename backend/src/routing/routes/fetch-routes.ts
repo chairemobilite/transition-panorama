@@ -1,4 +1,4 @@
-import type { Api, PublicConfig } from 'common';
+import type { Api, PublicConfig } from 'contract';
 import type * as Utils from 'utils';
 import type {
     TransitionRouteBody,

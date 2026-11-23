@@ -1,4 +1,4 @@
-import { PublicConfig } from 'common';
+import { PublicConfig } from 'contract';
 
 // Injected by Vite
 declare const __CONFIG__: unknown;

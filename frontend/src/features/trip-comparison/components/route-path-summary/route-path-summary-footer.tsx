@@ -1,5 +1,5 @@
 import { RulerIcon } from '@phosphor-icons/react';
-import type { Api } from 'common';
+import type { Api } from 'contract';
 import { useTranslation } from 'react-i18next';
 
 import { createRouteSummary } from '@/features/trip-comparison/utils/route';

@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Api } from 'common';
+import { Api } from 'contract';
 import * as Utils from 'utils';
 import { z } from 'zod';
 

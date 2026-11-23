@@ -1,4 +1,4 @@
-import type { Api, PublicConfig } from 'common';
+import type { Api, PublicConfig } from 'contract';
 import type { OdTrip, RouteFetcher } from '../routes/fetch-routes';
 
 export const fetchUnimodalSetupRoute = async (

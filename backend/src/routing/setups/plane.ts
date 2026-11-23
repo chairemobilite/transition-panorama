@@ -1,4 +1,4 @@
-import type { Api, PublicConfig } from 'common';
+import type { Api, PublicConfig } from 'contract';
 import { fetchStepsViaStations, findClosestStation } from './via-stations';
 import type { OdTrip, RouteFetcher } from '../routes/fetch-routes';
 import { calculateDistanceMeters } from '../../utils/geo';

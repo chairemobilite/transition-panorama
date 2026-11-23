@@ -1,4 +1,4 @@
-import type { Api, PublicConfig } from 'common';
+import type { Api, PublicConfig } from 'contract';
 import { it } from 'vitest';
 import {
     createRouteFetcherForFakeTransition,

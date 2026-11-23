@@ -1,4 +1,4 @@
-import type { Api } from 'common';
+import type { Api } from 'contract';
 
 export type RouteOrder = 'travelTime';
 

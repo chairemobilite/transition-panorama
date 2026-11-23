@@ -1,6 +1,6 @@
-# common
+# contract
 
-Code shared by the frontend and the backend.
+What the frontend and the backend agree on: the API between them, and the public config.
 
 ## Commands
 

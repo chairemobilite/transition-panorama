@@ -1,5 +1,5 @@
 import express from 'express';
-import { Api } from 'common';
+import { Api } from 'contract';
 import type { Geocoder } from 'geocoder';
 import { ApiError, parseRequest } from '../utils/http';
 

@@ -1,5 +1,5 @@
 import type { Icon } from '@phosphor-icons/react';
-import type { Api } from 'common';
+import type { Api } from 'contract';
 
 import airplaneSvg from '@/assets/mode-icons/airplane.svg?raw';
 import busSvg from '@/assets/mode-icons/bus_city.svg?raw';

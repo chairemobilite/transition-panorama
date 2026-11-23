@@ -1,4 +1,4 @@
-import type { Api, PublicConfig } from 'common';
+import type { Api, PublicConfig } from 'contract';
 import * as Utils from 'utils';
 import type { OdTrip, RouteFetcher } from '../routes/fetch-routes';
 import { calculateDistanceMeters } from '../../utils/geo';

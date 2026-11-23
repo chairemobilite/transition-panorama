@@ -5,7 +5,7 @@ import {
     useQuery,
     useQueryClient,
 } from '@tanstack/react-query';
-import { Api } from 'common';
+import { Api } from 'contract';
 import type * as Utils from 'utils';
 
 const fetchPlaceSearch = async (

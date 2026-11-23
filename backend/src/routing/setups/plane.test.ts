@@ -1,4 +1,4 @@
-import type { PublicConfig } from 'common';
+import type { PublicConfig } from 'contract';
 import { it } from 'vitest';
 import {
     fetchPlaneTransitSetupRoute,

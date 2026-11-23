@@ -1,4 +1,4 @@
-import type { Api } from 'common';
+import type { Api } from 'contract';
 import { Fragment, useState } from 'react';
 
 import { MapRoutePath } from '@/features/trip-comparison/components/map/map-route-path';

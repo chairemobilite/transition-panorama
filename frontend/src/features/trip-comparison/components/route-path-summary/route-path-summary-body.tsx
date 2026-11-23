@@ -1,4 +1,4 @@
-import type { Api } from 'common';
+import type { Api } from 'contract';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 

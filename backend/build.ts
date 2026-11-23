@@ -2,7 +2,7 @@ import { build } from 'esbuild';
 import packageJson from './package.json' with { type: 'json' };
 
 // Workspaces whose TypeScript sources must be compiled into the bundle
-const bundledDependencies = new Set(['common', 'geocoder', 'utils']);
+const bundledDependencies = new Set(['contract', 'geocoder', 'utils']);
 
 await build({
     entryPoints: ['src/index.ts'],

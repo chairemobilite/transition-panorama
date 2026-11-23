@@ -40,7 +40,7 @@
     },
     "dependencies": {
         "@turf/turf": "^7.4.0",
-        "common": "workspace:*",
+        "contract": "workspace:*",
         "express": "^5.2.1",
         "geocoder": "workspace:*",
         "utils": "workspace:*",

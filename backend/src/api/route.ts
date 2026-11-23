@@ -1,5 +1,5 @@
 import express from 'express';
-import { Api, type PublicConfig } from 'common';
+import { Api, type PublicConfig } from 'contract';
 import {
     fetchPlaneTransitSetupRoute,
     fetchPlaneUnimodalSetupRoute,

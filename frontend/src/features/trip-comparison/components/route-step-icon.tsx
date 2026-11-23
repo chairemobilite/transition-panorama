@@ -1,4 +1,4 @@
-import type { Api } from 'common';
+import type { Api } from 'contract';
 import { useTranslation } from 'react-i18next';
 
 import { useTransitStepLabels } from '@/features/trip-comparison/hooks/use-transit-step-labels';

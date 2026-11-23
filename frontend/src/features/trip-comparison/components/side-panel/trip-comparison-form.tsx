@@ -3,7 +3,7 @@ import {
     CircleIcon,
     MapPinIcon,
 } from '@phosphor-icons/react';
-import { Api } from 'common';
+import { Api } from 'contract';
 import { useTranslation } from 'react-i18next';
 import type * as Utils from 'utils';
 

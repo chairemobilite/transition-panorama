@@ -1,4 +1,4 @@
-import type { Api } from 'common';
+import type { Api } from 'contract';
 import { useTranslation } from 'react-i18next';
 
 export const useModeLabels = (): Record<Api.Mode, string> => {

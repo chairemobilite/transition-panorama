@@ -3,14 +3,14 @@
   "private": true,
   "workspaces": [
     "backend",
-    "common",
+    "contract",
     "frontend",
     "geocoder",
     "utils"
   ],
   "scripts": {
     "build": "yarn workspaces foreach --all --exclude transition-public --topological-dev run build",
-    "check": "yarn workspace utils check && yarn workspace common check && yarn workspace geocoder check && yarn workspace backend check && yarn workspace frontend check",
+    "check": "yarn workspace utils check && yarn workspace contract check && yarn workspace geocoder check && yarn workspace backend check && yarn workspace frontend check",
     "codegen": "yarn workspaces foreach --all --exclude transition-public run codegen",
     "dev": "concurrently -n backend,frontend -c blue,green \"yarn workspace backend dev\" \"yarn workspace frontend dev\"",
     "fix": "yarn workspaces foreach --all --exclude transition-public run fix",

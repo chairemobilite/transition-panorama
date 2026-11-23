@@ -1,5 +1,5 @@
 import { TrophyIcon } from '@phosphor-icons/react';
-import type { Api } from 'common';
+import type { Api } from 'contract';
 import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 

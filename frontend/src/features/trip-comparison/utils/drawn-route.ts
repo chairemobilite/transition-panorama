@@ -1,5 +1,5 @@
 import type { Icon } from '@phosphor-icons/react';
-import type { Api } from 'common';
+import type { Api } from 'contract';
 import type { LineString } from 'geojson';
 
 import { sortRoutes } from '@/features/trip-comparison/utils/route';
