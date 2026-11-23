@@ -50,10 +50,16 @@ const restartOnConfigChange = (): Plugin => ({
     },
 });
 
-// https://vite.dev/config/
-export default defineConfig(({ mode }) => {
-    const { BACKEND_PORT } = loadEnv(mode, envDir, '');
+// A build has no server, so only the dev server proxies the API requests
+const readDevBackendUrl = (mode: string) => {
+    const { BACKEND_PORT } = z
+        .object({ BACKEND_PORT: z.coerce.number().int().positive() })
+        .parse(loadEnv(mode, envDir, ''));
+    return `http://localhost:${BACKEND_PORT}`;
+};
 
+// https://vite.dev/config/
+export default defineConfig(({ command, mode }) => {
     return {
         plugins: [
             // Please make sure that '@tanstack/router-plugin' is passed before '@vitejs/plugin-react'
@@ -75,8 +81,9 @@ export default defineConfig(({ mode }) => {
         },
         envDir,
         define: { __CONFIG__: readBrowserConfig() },
-        server: {
-            proxy: { '/api': `http://localhost:${BACKEND_PORT}` },
-        },
+        server:
+            command === 'serve'
+                ? { proxy: { '/api': readDevBackendUrl(mode) } }
+                : {},
     };
 });
