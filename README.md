@@ -48,6 +48,22 @@ Run from the repository's root, with `yarn <command>`.
 | `test`          | Runs the tests.                                 |
 | `test:coverage` | Runs the tests and reports the code they cover. |
 
+## Structure
+
+The project is split into workspaces, each with its own README, dependencies and commands.
+
+- `apps/` holds what runs and is deployed.
+- `packages/` holds what the apps import. A package never depends on an app.
+
+| Workspace                                      | What it is                                                                |
+| ---------------------------------------------- | ------------------------------------------------------------------------- |
+| [`apps/frontend`](./apps/frontend)             | The web app people use to compare the scenarios.                          |
+| [`apps/backend`](./apps/backend)               | The server between the frontend and Transition.                           |
+| [`packages/contract`](./packages/contract)     | What the frontend and the backend agree on: their API, the public config. |
+| [`packages/geocoder`](./packages/geocoder)     | Finds places through geocoding services.                                  |
+| [`packages/utils`](./packages/utils)           | Generic code shared by the other workspaces.                              |
+| [`packages/dev-config`](./packages/dev-config) | Settings of the development tools, shared by the other workspaces.        |
+
 ## Development tools
 
 - [Geocoder comparison](./packages/geocoder/README.md#comparison-tool): compares what the geocoders find.
