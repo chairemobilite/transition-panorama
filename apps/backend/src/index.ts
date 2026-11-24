@@ -1,8 +1,7 @@
 import express from 'express';
 import { createGeocoder } from 'geocoder';
+import { TransitionClient } from 'transition-client';
 import * as Utils from 'utils';
-
-import { TransitionClient } from '../../../packages/transition-client/src/transition-client';
 
 import { createPlaceRouter } from './api/place';
 import { createRouteRouter } from './api/route';

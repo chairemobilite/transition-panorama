@@ -1,6 +1,5 @@
 import type { PublicConfig } from 'contract';
-
-import type { TransitionScenario } from '../../../../../packages/transition-client/src/scenarios';
+import type { TransitionScenario } from 'transition-client';
 
 const findScenarioId = (scenarios: TransitionScenario[], name: string) => {
     const namedScenarios = scenarios.filter(

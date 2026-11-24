@@ -1,17 +1,18 @@
 import type { Api, PublicConfig } from 'contract';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
+import {
+    TransitionClient,
+    type TransitionRouteBody,
+    type TransitionRouteResponse,
+} from 'transition-client';
 import type * as Utils from 'utils';
 import { afterAll, beforeAll, expect } from 'vitest';
 
-import type {
-    TransitionRouteBody,
-    TransitionRouteResponse,
-} from '../../../../../packages/transition-client/src/route';
-import { TransitionClient } from '../../../../../packages/transition-client/src/transition-client';
-import { fakeTransitionUrl } from '../../../../../packages/transition-client/src/transition.test-utils';
 import { RouteFetcher } from '../routes/fetch-routes';
 import { ScenarioIds } from '../routes/scenario-ids';
+
+const fakeTransitionUrl = 'http://transition.test';
 
 export const fakeScenarioName = 'scenario';
 

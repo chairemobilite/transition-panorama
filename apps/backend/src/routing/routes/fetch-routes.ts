@@ -1,11 +1,11 @@
 import type { Api, PublicConfig } from 'contract';
-import type * as Utils from 'utils';
-
 import type {
+    TransitionClient,
     TransitionRouteBody,
     TransitionRouteResponse,
-} from '../../../../../packages/transition-client/src/route';
-import type { TransitionClient } from '../../../../../packages/transition-client/src/transition-client';
+} from 'transition-client';
+import type * as Utils from 'utils';
+
 import { createPointFeature } from '../../utils/geo';
 
 import {

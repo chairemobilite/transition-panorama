@@ -1,7 +1,6 @@
 import type { PublicConfig } from 'contract';
+import type { TransitionScenario } from 'transition-client';
 import { expect, it } from 'vitest';
-
-import type { TransitionScenario } from '../../../../../packages/transition-client/src/scenarios';
 
 import { ScenarioIds } from './scenario-ids';
 
