@@ -55,15 +55,24 @@ const createLabel = (properties: Feature['properties']) => {
     return [name, address, city].filter(Boolean).join(', ');
 };
 
-// Photon can't look up a place by its OSM type and id, so the id also holds
-// the position to find it around, e.g. "W115802108@-73.5674277,45.5004189"
-export const createPlaceId = (feature: Feature) => {
-    const { geometry, properties } = feature;
-    if (properties.osm_type === undefined || properties.osm_id === undefined) {
+// e.g. "W115802108"
+const createOsmRef = (feature: Feature) => {
+    const { osm_type, osm_id } = feature.properties;
+    if (osm_type === undefined || osm_id === undefined) {
         return null;
     }
-    const [lng, lat] = geometry.coordinates;
-    return `${properties.osm_type}${properties.osm_id}@${lng},${lat}`;
+    return `${osm_type}${osm_id}`;
+};
+
+// Photon can't look up a place by its OSM reference, so the id also holds the
+// position to find it around, e.g. "W115802108@-73.5674277,45.5004189"
+export const createPlaceId = (feature: Feature) => {
+    const osmRef = createOsmRef(feature);
+    if (osmRef === null) {
+        return null;
+    }
+    const [lng, lat] = feature.geometry.coordinates;
+    return `${osmRef}@${lng},${lat}`;
 };
 
 const placeIdPositionPattern = /@([^,@]+),([^,@]+)$/;
@@ -95,6 +104,25 @@ const createPlace = (feature: Feature): Place | null => {
             lat: geometry.coordinates[1],
         },
     };
+};
+
+// The features that are the same place, which becomes one place made of the
+// first of them
+type FeatureGroup = [Feature, ...Feature[]];
+
+// Photon gives an OSM object once for each of its tags, like a way that is
+// both a bridge and a highway. We don't need that distinction. Photon has its
+// own dedupe, but their names often differ slightly, so it doesn't catch them.
+// https://github.com/komoot/photon/blob/master/docs/api-v1.md#dedupe-results
+export const groupFeatures = (features: Feature[]) => {
+    const groups = new Map<string | Feature, FeatureGroup>();
+    for (const feature of features) {
+        // A feature without an OSM reference is alone in its group
+        const key = createOsmRef(feature) ?? feature;
+        const group = groups.get(key);
+        groups.set(key, group ? [...group, feature] : [feature]);
+    }
+    return [...groups.values()];
 };
 
 export class PhotonGeocoder implements Geocoder {
@@ -131,21 +159,11 @@ export class PhotonGeocoder implements Geocoder {
             FeatureCollectionSchema,
             await response.json(),
         );
-        return (
-            features
-                .map(createPlace)
-                .filter((place) => place !== null)
-                // Photon gives results with the same OSM type, OSM id and
-                // position. They're physically the same thing, but one would
-                // be a bridge and the other a highway, for example. We don't
-                // need that distinction. Photon has its own dedupe, but their
-                // names often differ slightly, so it doesn't catch them.
-                // https://github.com/komoot/photon/blob/master/docs/api-v1.md#dedupe-results
-                .filter(
-                    (place, index, places) =>
-                        places.findIndex((other) => other.id === place.id) ===
-                        index,
-                )
-        );
+        return groupFeatures(features)
+            .map((group) => {
+                const [firstFeature] = group;
+                return createPlace(firstFeature);
+            })
+            .filter((place) => place !== null);
     }
 }
