@@ -12,11 +12,13 @@ export type TransitionRouteResponse = z.infer<
 >;
 
 export const postTransitionRoute = async (
+    transitionUrl: string,
     token: string,
     body: TransitionRouteBody,
 ): Promise<TransitionRouteResponse> => {
     const response = await Utils.fetchUpstream(() =>
         postApiV1Route(body, undefined, {
+            transitionUrl,
             headers: { Authorization: `Bearer ${token}` },
         }),
     );

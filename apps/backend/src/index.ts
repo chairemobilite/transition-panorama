@@ -16,7 +16,10 @@ const geocoder = createGeocoder(
     config.private.geocoder.provider,
     config.private.geocoder.url,
 );
-const transition = await TransitionClient.create(config.private.transition);
+const transition = await TransitionClient.create(
+    config.private.transition.url,
+    config.private.transition.credentials,
+);
 // Found at startup, so that a wrong name in the config stops the backend
 const scenarioIds = new ScenarioIds(
     config.public.routingSetups,

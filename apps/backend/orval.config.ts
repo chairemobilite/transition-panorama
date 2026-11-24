@@ -62,9 +62,6 @@ export default defineConfig({
             client: 'fetch',
             target: './src/transition/generated',
             schemas: './src/transition/generated/model',
-            baseUrl: {
-                runtime: 'process.env["TRANSITION_URL"]',
-            },
             override: {
                 mutator: {
                     path: './src/transition/fetch-transition.ts',

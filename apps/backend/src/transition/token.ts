@@ -8,12 +8,16 @@ export interface TransitionCredentials {
 }
 
 export const fetchTransitionToken = async (
+    transitionUrl: string,
     credentials: TransitionCredentials,
 ): Promise<string> => {
-    const response = await postToken({
-        usernameOrEmail: credentials.userName,
-        password: credentials.password,
-    });
+    const response = await postToken(
+        {
+            usernameOrEmail: credentials.userName,
+            password: credentials.password,
+        },
+        { transitionUrl },
+    );
     if (response.status !== 200) {
         throw new Utils.HttpUpstreamError(response);
     }

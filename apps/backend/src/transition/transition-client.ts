@@ -18,28 +18,31 @@ export class TransitionClient {
     private renewal: Promise<void> | undefined;
 
     private constructor(
+        private readonly url: string,
         private readonly credentials: TransitionCredentials,
         private token: string,
     ) {}
 
     static async create(
+        url: string,
         credentials: TransitionCredentials,
     ): Promise<TransitionClient> {
         return new TransitionClient(
+            url,
             credentials,
-            await fetchTransitionToken(credentials),
+            await fetchTransitionToken(url, credentials),
         );
     }
 
     postRoute(body: TransitionRouteBody): Promise<TransitionRouteResponse> {
         return this.requestWithToken((token) =>
-            postTransitionRoute(token, body),
+            postTransitionRoute(this.url, token, body),
         );
     }
 
     fetchScenarios(): Promise<TransitionScenario[]> {
         return this.requestWithToken((token) =>
-            fetchTransitionScenarios(token),
+            fetchTransitionScenarios(this.url, token),
         );
     }
 
@@ -63,7 +66,7 @@ export class TransitionClient {
         if (this.token !== refusedToken) {
             return;
         }
-        this.renewal ??= fetchTransitionToken(this.credentials)
+        this.renewal ??= fetchTransitionToken(this.url, this.credentials)
             .then((token) => {
                 this.token = token;
             })

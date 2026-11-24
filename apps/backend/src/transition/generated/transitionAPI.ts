@@ -54,7 +54,7 @@ export const getPostTokenUrl = () => {
 
 
 
-  return `${process.env["TRANSITION_URL"]}/token`
+  return `/token`
 }
 
 /**
@@ -105,7 +105,7 @@ export const getGetApiVersionsUrl = () => {
 
 
 
-  return `${process.env["TRANSITION_URL"]}/api/versions`
+  return `/api/versions`
 }
 
 /**
@@ -149,7 +149,7 @@ export const getGetApiV1PathsUrl = () => {
 
 
 
-  return `${process.env["TRANSITION_URL"]}/api/v1/paths`
+  return `/api/v1/paths`
 }
 
 /**
@@ -193,7 +193,7 @@ export const getGetApiV1NodesUrl = () => {
 
 
 
-  return `${process.env["TRANSITION_URL"]}/api/v1/nodes`
+  return `/api/v1/nodes`
 }
 
 /**
@@ -237,7 +237,7 @@ export const getGetApiV1ScenariosUrl = () => {
 
 
 
-  return `${process.env["TRANSITION_URL"]}/api/v1/scenarios`
+  return `/api/v1/scenarios`
 }
 
 /**
@@ -281,7 +281,7 @@ export const getGetApiV1AgenciesUrl = () => {
 
 
 
-  return `${process.env["TRANSITION_URL"]}/api/v1/agencies`
+  return `/api/v1/agencies`
 }
 
 /**
@@ -325,7 +325,7 @@ export const getGetApiV1ServicesUrl = () => {
 
 
 
-  return `${process.env["TRANSITION_URL"]}/api/v1/services`
+  return `/api/v1/services`
 }
 
 /**
@@ -369,7 +369,7 @@ export const getGetApiV1LinesUrl = () => {
 
 
 
-  return `${process.env["TRANSITION_URL"]}/api/v1/lines`
+  return `/api/v1/lines`
 }
 
 /**
@@ -413,7 +413,7 @@ export const getGetApiV1RoutingModesUrl = () => {
 
 
 
-  return `${process.env["TRANSITION_URL"]}/api/v1/routing-modes`
+  return `/api/v1/routing-modes`
 }
 
 /**
@@ -469,7 +469,7 @@ export const getPostApiV1SummaryUrl = (params: PostApiV1SummaryParams,) => {
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `${process.env["TRANSITION_URL"]}/api/v1/summary?${stringifiedParams}` : `${process.env["TRANSITION_URL"]}/api/v1/summary`
+  return stringifiedParams.length > 0 ? `/api/v1/summary?${stringifiedParams}` : `/api/v1/summary`
 }
 
 /**
@@ -525,7 +525,7 @@ export const getPostApiV1RouteUrl = (params?: PostApiV1RouteParams,) => {
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `${process.env["TRANSITION_URL"]}/api/v1/route?${stringifiedParams}` : `${process.env["TRANSITION_URL"]}/api/v1/route`
+  return stringifiedParams.length > 0 ? `/api/v1/route?${stringifiedParams}` : `/api/v1/route`
 }
 
 /**
@@ -596,7 +596,7 @@ export const getPostApiV1AccessibilityUrl = (params?: PostApiV1AccessibilityPara
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `${process.env["TRANSITION_URL"]}/api/v1/accessibility?${stringifiedParams}` : `${process.env["TRANSITION_URL"]}/api/v1/accessibility`
+  return stringifiedParams.length > 0 ? `/api/v1/accessibility?${stringifiedParams}` : `/api/v1/accessibility`
 }
 
 /**

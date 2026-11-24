@@ -6,14 +6,21 @@ const parseBody = (text: string): unknown => {
     }
 };
 
+export interface TransitionRequestInit extends RequestInit {
+    // Optional only because the generated client may leave out its options,
+    // but every request needs it
+    transitionUrl?: string;
+}
+
 // Used by the generated client instead of fetch.
 // The default client parses every answer as JSON, but some of Transition's
 // errors are plain text.
 export const fetchTransition = async <T>(
-    url: string,
-    options: RequestInit,
+    path: string,
+    options: TransitionRequestInit,
 ): Promise<T> => {
-    const response = await fetch(url, options);
+    const { transitionUrl = '', ...init } = options;
+    const response = await fetch(`${transitionUrl}${path}`, init);
     const text = await response.text();
     return {
         data: text === '' ? {} : parseBody(text),

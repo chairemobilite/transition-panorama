@@ -190,7 +190,7 @@ export const createRouteFetcherForFakeTransition = async (
 ) => {
     return new RouteFetcher(
         new ScenarioIds([routingSetup], scenarios),
-        await TransitionClient.create({
+        await TransitionClient.create(fakeTransitionUrl, {
             userName: dummyText,
             password: dummyText,
         }),

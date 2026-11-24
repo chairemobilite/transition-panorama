@@ -9,10 +9,12 @@ export type TransitionScenario = z.infer<
 >;
 
 export const fetchTransitionScenarios = async (
+    transitionUrl: string,
     token: string,
 ): Promise<TransitionScenario[]> => {
     const response = await Utils.fetchUpstream(() =>
         getApiV1Scenarios({
+            transitionUrl,
             headers: { Authorization: `Bearer ${token}` },
         }),
     );

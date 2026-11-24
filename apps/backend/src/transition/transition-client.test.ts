@@ -16,6 +16,10 @@ import { fakeTransitionUrl } from './transition.test-utils';
 
 const credentials = { userName: 'user', password: 'password' };
 
+const createClient = () => {
+    return TransitionClient.create(fakeTransitionUrl, credentials);
+};
+
 const fakeScenarios = [
     {
         id: 'scenario-1',
@@ -90,7 +94,7 @@ describe('authentication', () => {
             loginTokens: ['token-1'],
             validToken: 'token-1',
         });
-        const client = await TransitionClient.create(credentials);
+        const client = await createClient();
         await expect(client.fetchScenarios()).resolves.toEqual(fakeScenarios);
         expect(spies.tokenEndpoint).toHaveBeenCalledTimes(1);
     });
@@ -100,7 +104,7 @@ describe('authentication', () => {
             loginTokens: ['token-1', 'token-2'],
             validToken: 'token-2',
         });
-        const client = await TransitionClient.create(credentials);
+        const client = await createClient();
         await expect(client.fetchScenarios()).resolves.toEqual(fakeScenarios);
         expect(spies.tokenEndpoint).toHaveBeenCalledTimes(2);
     });
@@ -110,7 +114,7 @@ describe('authentication', () => {
             loginTokens: ['token-1', 'token-2', 'token-3'],
             validToken: 'token-3',
         });
-        const client = await TransitionClient.create(credentials);
+        const client = await createClient();
         await expect(client.fetchScenarios()).rejects.toMatchObject({
             status: 401,
         });
@@ -124,7 +128,7 @@ describe('authentication', () => {
             validToken: 'token-1',
             scenariosStatus: 500,
         });
-        const client = await TransitionClient.create(credentials);
+        const client = await createClient();
         await expect(client.fetchScenarios()).rejects.toBeInstanceOf(
             Utils.HttpUpstreamError,
         );
@@ -136,7 +140,7 @@ describe('authentication', () => {
             loginTokens: ['token-1', 'token-2'],
             validToken: 'token-2',
         });
-        const client = await TransitionClient.create(credentials);
+        const client = await createClient();
         await Promise.all([
             client.fetchScenarios(),
             client.fetchScenarios(),
@@ -161,7 +165,7 @@ describe('authentication', () => {
                 { once: true },
             ),
         );
-        const client = await TransitionClient.create(credentials);
+        const client = await createClient();
         const heldRequest = client.fetchScenarios();
         await client.fetchScenarios();
         heldRefusal.resolve(undefined);
@@ -174,7 +178,7 @@ describe('authentication', () => {
             loginTokens: ['token-1', null, 'token-2'],
             validToken: 'token-2',
         });
-        const client = await TransitionClient.create(credentials);
+        const client = await createClient();
         await expect(client.fetchScenarios()).rejects.toMatchObject({
             status: 503,
         });
