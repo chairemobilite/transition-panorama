@@ -60,11 +60,11 @@ export default defineConfig({
             clean: true, // Cleans transitionZod's files too, as it generates into the same folder later
             mode: 'single',
             client: 'fetch',
-            target: './src/transition/generated',
-            schemas: './src/transition/generated/model',
+            target: '../../packages/transition-client/src/generated',
+            schemas: '../../packages/transition-client/src/generated/model',
             override: {
                 mutator: {
-                    path: './src/transition/fetch-transition.ts',
+                    path: '../../packages/transition-client/src/fetch-transition.ts',
                     name: 'fetchTransition',
                 },
             },
@@ -85,7 +85,7 @@ export default defineConfig({
         output: {
             mode: 'single',
             client: 'zod',
-            target: './src/transition/generated',
+            target: '../../packages/transition-client/src/generated',
             fileExtension: '.zod.ts',
             override: {
                 zod: {

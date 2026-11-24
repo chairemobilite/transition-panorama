@@ -1,7 +1,7 @@
 import { Api, type PublicConfig } from 'contract';
 import type * as Utils from 'utils';
 
-import type { TransitionRouteResponse } from '../../transition/route';
+import type { TransitionRouteResponse } from '../../../../../packages/transition-client/src/route';
 
 type TransitionRouteResult = TransitionRouteResponse['result'];
 

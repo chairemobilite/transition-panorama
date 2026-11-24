@@ -6,11 +6,7 @@ export default defineConfig({
             // Every file, even those no test imports, which would otherwise be
             // missing from the report instead of shown as uncovered
             include: ['src/**/*.ts'],
-            exclude: [
-                'src/transition/generated/**',
-                'src/**/*.test.ts',
-                'src/**/*.test-utils.ts',
-            ],
+            exclude: ['src/**/*.test.ts', 'src/**/*.test-utils.ts'],
         },
     },
 });

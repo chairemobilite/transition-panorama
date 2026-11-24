@@ -7,9 +7,9 @@ import { afterAll, beforeAll, expect } from 'vitest';
 import type {
     TransitionRouteBody,
     TransitionRouteResponse,
-} from '../../transition/route';
-import { TransitionClient } from '../../transition/transition-client';
-import { fakeTransitionUrl } from '../../transition/transition.test-utils';
+} from '../../../../../packages/transition-client/src/route';
+import { TransitionClient } from '../../../../../packages/transition-client/src/transition-client';
+import { fakeTransitionUrl } from '../../../../../packages/transition-client/src/transition.test-utils';
 import { RouteFetcher } from '../routes/fetch-routes';
 import { ScenarioIds } from '../routes/scenario-ids';
 

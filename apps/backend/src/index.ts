@@ -2,12 +2,13 @@ import express from 'express';
 import { createGeocoder } from 'geocoder';
 import * as Utils from 'utils';
 
+import { TransitionClient } from '../../../packages/transition-client/src/transition-client';
+
 import { createPlaceRouter } from './api/place';
 import { createRouteRouter } from './api/route';
 import { readConfig } from './config';
 import { RouteFetcher } from './routing/routes/fetch-routes';
 import { ScenarioIds } from './routing/routes/scenario-ids';
-import { TransitionClient } from './transition/transition-client';
 import { ApiError } from './utils/http';
 
 const config = readConfig();

@@ -4,8 +4,8 @@ import type * as Utils from 'utils';
 import type {
     TransitionRouteBody,
     TransitionRouteResponse,
-} from '../../transition/route';
-import type { TransitionClient } from '../../transition/transition-client';
+} from '../../../../../packages/transition-client/src/route';
+import type { TransitionClient } from '../../../../../packages/transition-client/src/transition-client';
 import { createPointFeature } from '../../utils/geo';
 
 import {
