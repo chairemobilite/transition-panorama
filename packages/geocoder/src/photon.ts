@@ -88,12 +88,14 @@ const createOsmRef = (feature: Feature) => {
 export const createPlaceId = (feature: Feature) => {
     const { geometry, properties } = feature;
     const { osm_key, osm_value } = properties;
-    const osmRef = createOsmRef(feature);
-    if (osm_key === undefined || osm_value === undefined || osmRef === null) {
+    // The postcodes Photon makes up have no OSM reference, but their name is
+    // their code, e.g. "place=postcode/H2X 1Y4@-73.5694385,45.5093547"
+    const ref = createOsmRef(feature) ?? properties.name;
+    if (osm_key === undefined || osm_value === undefined || ref === undefined) {
         return null;
     }
     const [lng, lat] = geometry.coordinates;
-    return `${osm_key}=${osm_value}/${osmRef}@${lng},${lat}`;
+    return `${osm_key}=${osm_value}/${ref}@${lng},${lat}`;
 };
 
 const tagPattern = /(?<key>[^=/]+)=(?<value>[^/]+)/;

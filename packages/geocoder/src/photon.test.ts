@@ -137,17 +137,28 @@ describe('searchPlaces', () => {
     });
 
     // Like the postcodes, which Photon makes up
-    it('skips the features without an OSM type and id', async () => {
-        const featureWithoutOsmTypeAndId = {
-            type: 'Feature',
-            geometry: {
-                type: 'Point',
-                coordinates: [position.lng, position.lat],
-            },
-            properties: { name: 'Name' },
-        };
-        setUpFakeEndpoint('api', [featureWithoutOsmTypeAndId, feature]);
+    it('identifies a feature without an OSM reference by its name', async () => {
+        setUpFakeEndpoint('api', [
+            createNodeFeature({ osm_type: undefined, name: 'Name' }),
+        ]);
+        const [foundPlace] = await geocoder.searchPlaces({ text: 'text' });
+        expect(foundPlace?.id).toBe('key=value/Name@1,2');
+    });
+
+    it('skips the features without an OSM reference or a name', async () => {
+        setUpFakeEndpoint('api', [
+            createNodeFeature({ osm_type: undefined }),
+            feature,
+        ]);
         expect(await geocoder.searchPlaces({ text: 'text' })).toEqual([place]);
+    });
+
+    it('keeps apart the features without an OSM reference', async () => {
+        setUpFakeEndpoint('api', [
+            createNodeFeature({ osm_type: undefined, name: 'Name' }),
+            createNodeFeature({ osm_type: undefined, name: 'Other name' }),
+        ]);
+        expect(await geocoder.searchPlaces({ text: 'text' })).toHaveLength(2);
     });
 
     it('skips the features without a tag', async () => {
