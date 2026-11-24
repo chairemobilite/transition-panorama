@@ -89,7 +89,7 @@ describe('searchPlaces', () => {
         expect(await geocoder.searchPlaces({ text: 'text' })).toEqual([place]);
     });
 
-    it('labels the name, the address and the city', async () => {
+    it('labels the name, the address, the city, the state and the country', async () => {
         setUpFakeEndpoint('api', [
             createNodeFeature({
                 osm_id: 3,
@@ -97,10 +97,25 @@ describe('searchPlaces', () => {
                 housenumber: '10',
                 street: 'Street',
                 city: 'City',
+                state: 'State',
+                country: 'Country',
             }),
         ]);
         const [foundPlace] = await geocoder.searchPlaces({ text: 'text' });
-        expect(foundPlace?.label).toBe('Name, 10 Street, City');
+        expect(foundPlace?.label).toBe('Name, 10 Street, City, State, Country');
+    });
+
+    it('leaves out the parts that repeat the name', async () => {
+        setUpFakeEndpoint('api', [
+            createNodeFeature({
+                osm_id: 3,
+                name: 'State',
+                state: 'State',
+                country: 'Country',
+            }),
+        ]);
+        const [foundPlace] = await geocoder.searchPlaces({ text: 'text' });
+        expect(foundPlace?.label).toBe('State, Country');
     });
 
     it('labels an address without a name', async () => {

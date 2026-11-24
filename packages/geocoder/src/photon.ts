@@ -18,6 +18,8 @@ export const FeatureSchema = z.object({
         housenumber: z.string().optional(),
         street: z.string().optional(),
         city: z.string().optional(),
+        state: z.string().optional(),
+        country: z.string().optional(),
     }),
 });
 
@@ -49,11 +51,11 @@ const createReverseParams = (position: Utils.LngLat) => {
     });
 };
 
-// Photon has no label, so it's made like Pelias' "name, address, city"
 const createLabel = (properties: Feature['properties']) => {
-    const { name, housenumber, street, city } = properties;
+    const { name, housenumber, street, city, state, country } = properties;
     const address = [housenumber, street].filter(Boolean).join(' ');
-    return [name, address, city].filter(Boolean).join(', ');
+    const parts = [name, address, city, state, country].filter(Boolean);
+    return [...new Set(parts)].join(', ');
 };
 
 // e.g. "W115802108"
