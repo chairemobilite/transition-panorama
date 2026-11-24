@@ -24,13 +24,18 @@ const createNodeFeature = (properties: Record<string, unknown>) => {
             type: 'Point',
             coordinates: [position.lng, position.lat],
         },
-        properties: { osm_type: 'N', ...properties },
+        properties: {
+            osm_type: 'N',
+            osm_key: 'key',
+            osm_value: 'value',
+            ...properties,
+        },
     };
 };
 
 // A feature, and the place it becomes
 const feature = createNodeFeature({ osm_id: 3, name: 'Name' });
-const place = { id: 'N3@1,2', label: 'Name', position };
+const place = { id: 'key=value/N3@1,2', label: 'Name', position };
 
 const server = setupServer();
 
@@ -145,25 +150,33 @@ describe('searchPlaces', () => {
         expect(await geocoder.searchPlaces({ text: 'text' })).toEqual([place]);
     });
 
-    // Our custom ids are generated from the OSM type, the OSM id and the position.
-    // Photon can return multiple features with those values being identical.
-    it('keeps only the first of the places with the same place id', async () => {
-        const featureWithSameId = createNodeFeature({
+    it('skips the features without a tag', async () => {
+        setUpFakeEndpoint('api', [
+            createNodeFeature({ osm_id: 4, osm_key: undefined }),
+            feature,
+        ]);
+        expect(await geocoder.searchPlaces({ text: 'text' })).toEqual([place]);
+    });
+
+    it('keeps only the first tag of an OSM object', async () => {
+        const featureWithOtherTag = createNodeFeature({
             osm_id: 3,
+            osm_value: 'other value',
             name: 'Other name',
         });
-        setUpFakeEndpoint('api', [feature, featureWithSameId]);
+        setUpFakeEndpoint('api', [feature, featureWithOtherTag]);
         expect(await geocoder.searchPlaces({ text: 'text' })).toEqual([place]);
     });
 });
 
 describe('lookUpPlace', () => {
-    it('sends the position from the id', async () => {
+    it('sends the tag and the position from the id', async () => {
         const reverseEndpointSpy = setUpFakeEndpoint('reverse', []);
         await geocoder.lookUpPlace(place.id);
         expect(reverseEndpointSpy).toHaveBeenCalledWith({
             lon: '1',
             lat: '2',
+            osm_tag: 'key:value',
             limit: '10',
         });
     });
@@ -181,11 +194,17 @@ describe('lookUpPlace', () => {
         expect(await geocoder.lookUpPlace(place.id)).toBe(null);
     });
 
-    it('returns null without searching when the id has no position', async () => {
-        const reverseEndpointSpy = setUpFakeEndpoint('reverse', []);
-        expect(await geocoder.lookUpPlace('N3')).toBe(null);
-        expect(reverseEndpointSpy).not.toHaveBeenCalled();
-    });
+    it.each([
+        ['tag', 'N3@1,2'],
+        ['position', 'key=value/N3'],
+    ])(
+        'returns null without searching when the id has no %s',
+        async (_missing, id) => {
+            const reverseEndpointSpy = setUpFakeEndpoint('reverse', []);
+            expect(await geocoder.lookUpPlace(id)).toBe(null);
+            expect(reverseEndpointSpy).not.toHaveBeenCalled();
+        },
+    );
 });
 
 describe('onResponse', () => {

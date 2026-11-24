@@ -14,6 +14,8 @@ export const FeatureSchema = z.object({
         // Only the features we use
         osm_type: z.string().optional(),
         osm_id: z.number().optional(),
+        osm_key: z.string().optional(),
+        osm_value: z.string().optional(),
         name: z.string().optional(),
         housenumber: z.string().optional(),
         street: z.string().optional(),
@@ -29,9 +31,20 @@ const FeatureCollectionSchema = z.object({
     features: z.array(FeatureSchema),
 });
 
-// Photon's reverse returns only the closest place by default, which can be
-// another place at the same point, like a shop and the building it's in
+// Photon's reverse returns only the closest place by default. A few more, in
+// case another place with the same tag is at the same point
 const reverseLimit = 10;
+
+interface OsmTag {
+    key: string;
+    value: string;
+}
+
+// What a place id tells to find the place again
+interface ParsedPlaceId {
+    tag: OsmTag;
+    position: Utils.LngLat;
+}
 
 const createSearchParams = (search: PlaceSearch) => {
     const { text, focus } = search;
@@ -43,10 +56,12 @@ const createSearchParams = (search: PlaceSearch) => {
     return params;
 };
 
-const createReverseParams = (position: Utils.LngLat) => {
+const createReverseParams = (parsedPlaceId: ParsedPlaceId) => {
+    const { tag, position } = parsedPlaceId;
     return new URLSearchParams({
         lon: String(position.lng),
         lat: String(position.lat),
+        osm_tag: `${tag.key}:${tag.value}`,
         limit: String(reverseLimit),
     });
 };
@@ -68,29 +83,42 @@ const createOsmRef = (feature: Feature) => {
 };
 
 // Photon can't look up a place by its OSM reference, so the id also holds the
-// position to find it around, e.g. "W115802108@-73.5674277,45.5004189"
+// tag and the position to find it with, e.g.
+// "amenity=cafe/N4349778993@-73.5707818,45.5092771"
 export const createPlaceId = (feature: Feature) => {
+    const { geometry, properties } = feature;
+    const { osm_key, osm_value } = properties;
     const osmRef = createOsmRef(feature);
-    if (osmRef === null) {
+    if (osm_key === undefined || osm_value === undefined || osmRef === null) {
         return null;
     }
-    const [lng, lat] = feature.geometry.coordinates;
-    return `${osmRef}@${lng},${lat}`;
+    const [lng, lat] = geometry.coordinates;
+    return `${osm_key}=${osm_value}/${osmRef}@${lng},${lat}`;
 };
 
-const placeIdPositionPattern = /@([^,@]+),([^,@]+)$/;
+const tagPattern = /(?<key>[^=/]+)=(?<value>[^/]+)/;
+const positionPattern = /(?<lng>[^,@]+),(?<lat>[^,@]+)/;
+const placeIdPattern = new RegExp(
+    `^${tagPattern.source}/.*@${positionPattern.source}$`,
+);
 
-const parsePlaceIdPosition = (id: string): Utils.LngLat | null => {
-    const match = placeIdPositionPattern.exec(id);
-    if (!match) {
+const parsePlaceId = (id: string): ParsedPlaceId | null => {
+    const groups = placeIdPattern.exec(id)?.groups;
+    if (!groups) {
         return null;
     }
-    const [, lng, lat] = match;
+    const { key, value, lng, lat } = groups;
+    // Never, only for the types
+    if (key === undefined || value === undefined) {
+        return null;
+    }
     const result = Utils.LngLatSchema.safeParse({
         lng: Number(lng),
         lat: Number(lat),
     });
-    return result.success ? result.data : null;
+    return result.success
+        ? { tag: { key, value }, position: result.data }
+        : null;
 };
 
 const createPlace = (feature: Feature): Place | null => {
@@ -139,14 +167,14 @@ export class PhotonGeocoder implements Geocoder {
     }
 
     async lookUpPlace(id: string): Promise<Place | null> {
-        const position = parsePlaceIdPosition(id);
-        if (!position) {
+        const parsedId = parsePlaceId(id);
+        if (!parsedId) {
             return null;
         }
-        // Finds the place among the places around the position in its id
+        // Finds the place among the places with its tag around its position
         const places = await this.fetchPlaces(
             'reverse',
-            createReverseParams(position),
+            createReverseParams(parsedId),
         );
         return places.find((place) => place.id === id) ?? null;
     }
