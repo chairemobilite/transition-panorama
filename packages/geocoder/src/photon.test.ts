@@ -40,7 +40,7 @@ const place = { id: 'key=value/N3@1,2', label: 'Name', position };
 const server = setupServer();
 
 beforeAll(() => {
-    server.listen({ onUnhandledRequest: 'error' });
+    server.listen({ onUnhandledFrame: 'error' });
 });
 
 afterEach(() => {

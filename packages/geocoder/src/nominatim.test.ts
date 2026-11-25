@@ -35,7 +35,7 @@ const place = { id: 'W3', label: 'Name, City', position };
 const server = setupServer();
 
 beforeAll(() => {
-    server.listen({ onUnhandledRequest: 'error' });
+    server.listen({ onUnhandledFrame: 'error' });
 });
 
 afterEach(() => {
