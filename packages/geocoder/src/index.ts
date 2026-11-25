@@ -1,4 +1,11 @@
-export type { Geocoder, GeocoderOptions, Place, PlaceSearch } from './geocoder';
+export type {
+    Geocoder,
+    GeocoderOptions,
+    LanguageTag,
+    Place,
+    PlaceLookup,
+    PlaceSearch,
+} from './geocoder';
 export { createGeocoder } from './geocoder-factory';
 export {
     type GeocoderProviderName,

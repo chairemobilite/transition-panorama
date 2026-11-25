@@ -46,30 +46,33 @@ afterAll(() => {
     server.close();
 });
 
-// Answers the requests to a path with the features, and returns a spy called
-// with the search params of each request
+// Answers the requests to a path with the features, and returns spies called
+// with the search params and the Accept-Language header of each request
 const setUpFakeEndpoint = (path: string, features: unknown[]) => {
-    const endpointSpy = vi.fn<(searchParams: Record<string, string>) => void>();
+    const searchParamsSpy =
+        vi.fn<(searchParams: Record<string, string>) => void>();
+    const languageSpy = vi.fn<(language: string | null) => void>();
     server.use(
         http.get(`${nominatimUrl}/${path}`, (info) => {
             const { searchParams } = new URL(info.request.url);
-            endpointSpy(Object.fromEntries(searchParams));
+            searchParamsSpy(Object.fromEntries(searchParams));
+            languageSpy(info.request.headers.get('Accept-Language'));
             return HttpResponse.json({ type: 'FeatureCollection', features });
         }),
     );
-    return endpointSpy;
+    return { searchParamsSpy, languageSpy };
 };
 
 const geocoder = new NominatimGeocoder(nominatimUrl);
 
 describe('searchPlaces', () => {
     it('sends the text, and a box around the focus', async () => {
-        const searchEndpointSpy = setUpFakeEndpoint('search', []);
+        const { searchParamsSpy } = setUpFakeEndpoint('search', []);
         const focusBoxHalfSizeDegrees = 1;
         await new NominatimGeocoder(nominatimUrl, {
             focusBoxHalfSizeDegrees,
         }).searchPlaces({ text: 'text', focus: { lng: 1, lat: 10 } });
-        expect(searchEndpointSpy).toHaveBeenCalledWith({
+        expect(searchParamsSpy).toHaveBeenCalledWith({
             q: 'text',
             format: 'geojson',
             viewbox: '0,9,2,11',
@@ -77,21 +80,21 @@ describe('searchPlaces', () => {
     });
 
     it('sends only the text without a focus', async () => {
-        const searchEndpointSpy = setUpFakeEndpoint('search', []);
+        const { searchParamsSpy } = setUpFakeEndpoint('search', []);
         await geocoder.searchPlaces({ text: 'text' });
-        expect(searchEndpointSpy).toHaveBeenCalledWith({
+        expect(searchParamsSpy).toHaveBeenCalledWith({
             q: 'text',
             format: 'geojson',
         });
     });
 
     it('cuts the box at the poles and the antimeridian', async () => {
-        const searchEndpointSpy = setUpFakeEndpoint('search', []);
+        const { searchParamsSpy } = setUpFakeEndpoint('search', []);
         const focusBoxHalfSizeDegrees = 1;
         await new NominatimGeocoder(nominatimUrl, {
             focusBoxHalfSizeDegrees,
         }).searchPlaces({ text: 'text', focus: { lng: 180, lat: -90 } });
-        expect(searchEndpointSpy).toHaveBeenCalledWith(
+        expect(searchParamsSpy).toHaveBeenCalledWith(
             expect.objectContaining({ viewbox: '179,-90,180,-89' }),
         );
     });
@@ -128,9 +131,9 @@ describe('searchPlaces', () => {
 
 describe('lookUpPlace', () => {
     it('sends the id', async () => {
-        const lookupEndpointSpy = setUpFakeEndpoint('lookup', []);
-        await geocoder.lookUpPlace(place.id);
-        expect(lookupEndpointSpy).toHaveBeenCalledWith({
+        const { searchParamsSpy } = setUpFakeEndpoint('lookup', []);
+        await geocoder.lookUpPlace({ id: place.id });
+        expect(searchParamsSpy).toHaveBeenCalledWith({
             osm_ids: place.id,
             format: 'geojson',
         });
@@ -138,18 +141,32 @@ describe('lookUpPlace', () => {
 
     it('returns the feature as a place', async () => {
         setUpFakeEndpoint('lookup', [feature]);
-        expect(await geocoder.lookUpPlace(place.id)).toEqual(place);
+        expect(await geocoder.lookUpPlace({ id: place.id })).toEqual(place);
     });
 
     it('returns null when no place has the id', async () => {
         setUpFakeEndpoint('lookup', []);
-        expect(await geocoder.lookUpPlace(place.id)).toBe(null);
+        expect(await geocoder.lookUpPlace({ id: place.id })).toBe(null);
     });
 
     it('returns null without a request when the id is no OSM reference', async () => {
-        const lookupEndpointSpy = setUpFakeEndpoint('lookup', []);
-        expect(await geocoder.lookUpPlace('W3x')).toBe(null);
-        expect(lookupEndpointSpy).not.toHaveBeenCalled();
+        const { searchParamsSpy } = setUpFakeEndpoint('lookup', []);
+        expect(await geocoder.lookUpPlace({ id: 'W3x' })).toBe(null);
+        expect(searchParamsSpy).not.toHaveBeenCalled();
+    });
+});
+
+describe('language', () => {
+    it('sends the language of a search', async () => {
+        const { languageSpy } = setUpFakeEndpoint('search', []);
+        await geocoder.searchPlaces({ text: 'text', language: 'fr-CA' });
+        expect(languageSpy).toHaveBeenCalledWith('fr-CA');
+    });
+
+    it('sends the language of a lookup', async () => {
+        const { languageSpy } = setUpFakeEndpoint('lookup', []);
+        await geocoder.lookUpPlace({ id: place.id, language: 'fr-CA' });
+        expect(languageSpy).toHaveBeenCalledWith('fr-CA');
     });
 });
 

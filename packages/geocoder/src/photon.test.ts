@@ -51,30 +51,33 @@ afterAll(() => {
     server.close();
 });
 
-// Answers the requests to a path with the features, and returns a spy called
-// with the search params of each request
+// Answers the requests to a path with the features, and returns spies called
+// with the search params and the Accept-Language header of each request
 const setUpFakeEndpoint = (path: string, features: unknown[]) => {
-    const endpointSpy = vi.fn<(searchParams: Record<string, string>) => void>();
+    const searchParamsSpy =
+        vi.fn<(searchParams: Record<string, string>) => void>();
+    const languageSpy = vi.fn<(language: string | null) => void>();
     server.use(
         http.get(`${photonUrl}/${path}`, (info) => {
             const { searchParams } = new URL(info.request.url);
-            endpointSpy(Object.fromEntries(searchParams));
+            searchParamsSpy(Object.fromEntries(searchParams));
+            languageSpy(info.request.headers.get('Accept-Language'));
             return HttpResponse.json({ type: 'FeatureCollection', features });
         }),
     );
-    return endpointSpy;
+    return { searchParamsSpy, languageSpy };
 };
 
 const geocoder = new PhotonGeocoder(photonUrl);
 
 describe('searchPlaces', () => {
     it('sends the text and the focus', async () => {
-        const searchEndpointSpy = setUpFakeEndpoint('api', []);
+        const { searchParamsSpy } = setUpFakeEndpoint('api', []);
         await geocoder.searchPlaces({
             text: 'text',
             focus: { lng: 3, lat: 4 },
         });
-        expect(searchEndpointSpy).toHaveBeenCalledWith({
+        expect(searchParamsSpy).toHaveBeenCalledWith({
             q: 'text',
             lon: '3',
             lat: '4',
@@ -82,9 +85,9 @@ describe('searchPlaces', () => {
     });
 
     it('sends only the text without a focus', async () => {
-        const searchEndpointSpy = setUpFakeEndpoint('api', []);
+        const { searchParamsSpy } = setUpFakeEndpoint('api', []);
         await geocoder.searchPlaces({ text: 'text' });
-        expect(searchEndpointSpy).toHaveBeenCalledWith({
+        expect(searchParamsSpy).toHaveBeenCalledWith({
             q: 'text',
         });
     });
@@ -182,9 +185,9 @@ describe('searchPlaces', () => {
 
 describe('lookUpPlace', () => {
     it('sends the tag and the position from the id', async () => {
-        const reverseEndpointSpy = setUpFakeEndpoint('reverse', []);
-        await geocoder.lookUpPlace(place.id);
-        expect(reverseEndpointSpy).toHaveBeenCalledWith({
+        const { searchParamsSpy } = setUpFakeEndpoint('reverse', []);
+        await geocoder.lookUpPlace({ id: place.id });
+        expect(searchParamsSpy).toHaveBeenCalledWith({
             lon: '1',
             lat: '2',
             osm_tag: 'key:value',
@@ -197,12 +200,12 @@ describe('lookUpPlace', () => {
             createNodeFeature({ osm_id: 4 }),
             feature,
         ]);
-        expect(await geocoder.lookUpPlace(place.id)).toEqual(place);
+        expect(await geocoder.lookUpPlace({ id: place.id })).toEqual(place);
     });
 
     it('returns null when no place around has the id', async () => {
         setUpFakeEndpoint('reverse', [createNodeFeature({ osm_id: 4 })]);
-        expect(await geocoder.lookUpPlace(place.id)).toBe(null);
+        expect(await geocoder.lookUpPlace({ id: place.id })).toBe(null);
     });
 
     it.each([
@@ -211,11 +214,25 @@ describe('lookUpPlace', () => {
     ])(
         'returns null without searching when the id has no %s',
         async (_missing, id) => {
-            const reverseEndpointSpy = setUpFakeEndpoint('reverse', []);
-            expect(await geocoder.lookUpPlace(id)).toBe(null);
-            expect(reverseEndpointSpy).not.toHaveBeenCalled();
+            const { searchParamsSpy } = setUpFakeEndpoint('reverse', []);
+            expect(await geocoder.lookUpPlace({ id })).toBe(null);
+            expect(searchParamsSpy).not.toHaveBeenCalled();
         },
     );
+});
+
+describe('language', () => {
+    it('sends the language of a search', async () => {
+        const { languageSpy } = setUpFakeEndpoint('api', []);
+        await geocoder.searchPlaces({ text: 'text', language: 'fr-CA' });
+        expect(languageSpy).toHaveBeenCalledWith('fr-CA');
+    });
+
+    it('sends the language of a lookup', async () => {
+        const { languageSpy } = setUpFakeEndpoint('reverse', []);
+        await geocoder.lookUpPlace({ id: place.id, language: 'fr-CA' });
+        expect(languageSpy).toHaveBeenCalledWith('fr-CA');
+    });
 });
 
 describe('onResponse', () => {

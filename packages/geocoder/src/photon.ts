@@ -1,7 +1,15 @@
 import * as Utils from 'utils';
 import { z } from 'zod';
 
-import type { Geocoder, GeocoderOptions, Place, PlaceSearch } from './geocoder';
+import type {
+    Geocoder,
+    GeocoderOptions,
+    LanguageTag,
+    Place,
+    PlaceLookup,
+    PlaceSearch,
+} from './geocoder';
+import { createLanguageHeaders } from './language-headers';
 
 // Photon's answers, with only the fields we use
 // https://github.com/komoot/photon#search-and-geocoding-api
@@ -165,10 +173,15 @@ export class PhotonGeocoder implements Geocoder {
     ) {}
 
     async searchPlaces(search: PlaceSearch): Promise<Place[]> {
-        return this.fetchPlaces('api', createSearchParams(search));
+        return this.fetchPlaces(
+            'api',
+            createSearchParams(search),
+            search.language,
+        );
     }
 
-    async lookUpPlace(id: string): Promise<Place | null> {
+    async lookUpPlace(lookup: PlaceLookup): Promise<Place | null> {
+        const { id, language } = lookup;
         const parsedId = parsePlaceId(id);
         if (!parsedId) {
             return null;
@@ -177,13 +190,22 @@ export class PhotonGeocoder implements Geocoder {
         const places = await this.fetchPlaces(
             'reverse',
             createReverseParams(parsedId),
+            language,
         );
         return places.find((place) => place.id === id) ?? null;
     }
 
-    private async fetchPlaces(path: string, params: URLSearchParams) {
+    private async fetchPlaces(
+        path: string,
+        params: URLSearchParams,
+        language: LanguageTag | undefined,
+    ) {
         const response = await Utils.fetchUpstream(() =>
-            fetch(`${this.url}/${path}?${params.toString()}`),
+            fetch(`${this.url}/${path}?${params.toString()}`, {
+                // Photon's lang parameter would refuse the languages the
+                // instance doesn't have, and regional tags like "fr-CA"
+                headers: createLanguageHeaders(language),
+            }),
         );
         if (!response.ok) {
             throw new Utils.HttpUpstreamError({

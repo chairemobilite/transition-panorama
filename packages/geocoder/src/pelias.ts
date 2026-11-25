@@ -1,7 +1,15 @@
 import * as Utils from 'utils';
 import { z } from 'zod';
 
-import type { Geocoder, GeocoderOptions, Place, PlaceSearch } from './geocoder';
+import type {
+    Geocoder,
+    GeocoderOptions,
+    LanguageTag,
+    Place,
+    PlaceLookup,
+    PlaceSearch,
+} from './geocoder';
+import { createLanguageHeaders } from './language-headers';
 
 // Pelias' answers, with only the fields we use
 // https://github.com/pelias/documentation/blob/master/autocomplete.md
@@ -59,14 +67,17 @@ export class PeliasGeocoder implements Geocoder {
         const features = await this.fetchFeatures(
             'autocomplete',
             createAutocompleteParams(search),
+            search.language,
         );
         return features.map(createPlace);
     }
 
-    async lookUpPlace(id: string): Promise<Place | null> {
+    async lookUpPlace(lookup: PlaceLookup): Promise<Place | null> {
+        const { id, language } = lookup;
         const [feature] = await this.fetchFeatures(
             'place',
             new URLSearchParams({ ids: id }),
+            language,
         );
         if (!feature) {
             return null;
@@ -74,9 +85,15 @@ export class PeliasGeocoder implements Geocoder {
         return createPlace(feature);
     }
 
-    private async fetchFeatures(path: string, params: URLSearchParams) {
+    private async fetchFeatures(
+        path: string,
+        params: URLSearchParams,
+        language: LanguageTag | undefined,
+    ) {
         const response = await Utils.fetchUpstream(() =>
-            fetch(`${this.url}/${path}?${params.toString()}`),
+            fetch(`${this.url}/${path}?${params.toString()}`, {
+                headers: createLanguageHeaders(language),
+            }),
         );
         if (!response.ok) {
             throw new Utils.HttpUpstreamError({

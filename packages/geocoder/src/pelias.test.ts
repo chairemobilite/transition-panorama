@@ -47,30 +47,33 @@ afterAll(() => {
     server.close();
 });
 
-// Answers the requests to a path with the features, and returns a spy called
-// with the search params of each request
+// Answers the requests to a path with the features, and returns spies called
+// with the search params and the Accept-Language header of each request
 const setUpFakeEndpoint = (path: string, features: unknown[]) => {
-    const endpointSpy = vi.fn<(searchParams: Record<string, string>) => void>();
+    const searchParamsSpy =
+        vi.fn<(searchParams: Record<string, string>) => void>();
+    const languageSpy = vi.fn<(language: string | null) => void>();
     server.use(
         http.get(`${peliasUrl}/${path}`, (info) => {
             const { searchParams } = new URL(info.request.url);
-            endpointSpy(Object.fromEntries(searchParams));
+            searchParamsSpy(Object.fromEntries(searchParams));
+            languageSpy(info.request.headers.get('Accept-Language'));
             return HttpResponse.json({ type: 'FeatureCollection', features });
         }),
     );
-    return endpointSpy;
+    return { searchParamsSpy, languageSpy };
 };
 
 const geocoder = new PeliasGeocoder(peliasUrl);
 
 describe('searchPlaces', () => {
     it('sends the text and the focus', async () => {
-        const autocompleteEndpointSpy = setUpFakeEndpoint('autocomplete', []);
+        const { searchParamsSpy } = setUpFakeEndpoint('autocomplete', []);
         await geocoder.searchPlaces({
             text: 'text',
             focus: { lng: 3, lat: 4 },
         });
-        expect(autocompleteEndpointSpy).toHaveBeenCalledWith({
+        expect(searchParamsSpy).toHaveBeenCalledWith({
             text: 'text',
             'focus.point.lon': '3',
             'focus.point.lat': '4',
@@ -78,9 +81,9 @@ describe('searchPlaces', () => {
     });
 
     it('sends only the text without a focus', async () => {
-        const autocompleteEndpointSpy = setUpFakeEndpoint('autocomplete', []);
+        const { searchParamsSpy } = setUpFakeEndpoint('autocomplete', []);
         await geocoder.searchPlaces({ text: 'text' });
-        expect(autocompleteEndpointSpy).toHaveBeenCalledWith({
+        expect(searchParamsSpy).toHaveBeenCalledWith({
             text: 'text',
         });
     });
@@ -93,21 +96,35 @@ describe('searchPlaces', () => {
 
 describe('lookUpPlace', () => {
     it('sends the id', async () => {
-        const placeEndpointSpy = setUpFakeEndpoint('place', []);
-        await geocoder.lookUpPlace(place.id);
-        expect(placeEndpointSpy).toHaveBeenCalledWith({
+        const { searchParamsSpy } = setUpFakeEndpoint('place', []);
+        await geocoder.lookUpPlace({ id: place.id });
+        expect(searchParamsSpy).toHaveBeenCalledWith({
             ids: place.id,
         });
     });
 
     it('returns the feature as a place', async () => {
         setUpFakeEndpoint('place', [feature]);
-        expect(await geocoder.lookUpPlace(place.id)).toEqual(place);
+        expect(await geocoder.lookUpPlace({ id: place.id })).toEqual(place);
     });
 
     it('returns null when no place has the id', async () => {
         setUpFakeEndpoint('place', []);
-        expect(await geocoder.lookUpPlace(place.id)).toBe(null);
+        expect(await geocoder.lookUpPlace({ id: place.id })).toBe(null);
+    });
+});
+
+describe('language', () => {
+    it('sends the language of a search', async () => {
+        const { languageSpy } = setUpFakeEndpoint('autocomplete', []);
+        await geocoder.searchPlaces({ text: 'text', language: 'fr-CA' });
+        expect(languageSpy).toHaveBeenCalledWith('fr-CA');
+    });
+
+    it('sends the language of a lookup', async () => {
+        const { languageSpy } = setUpFakeEndpoint('place', []);
+        await geocoder.lookUpPlace({ id: place.id, language: 'fr-CA' });
+        expect(languageSpy).toHaveBeenCalledWith('fr-CA');
     });
 });
 

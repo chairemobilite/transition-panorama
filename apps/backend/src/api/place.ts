@@ -22,7 +22,7 @@ export const createPlaceRouter = (geocoder: Geocoder) => {
         res: express.Response,
     ) => {
         const { id } = parseRequest(Api.placeLookupEndpoint.params, req.params);
-        const place = await geocoder.lookUpPlace(id);
+        const place = await geocoder.lookUpPlace({ id });
         if (!place) {
             throw new ApiError(404, { error: `Place not found: ${id}` });
         }

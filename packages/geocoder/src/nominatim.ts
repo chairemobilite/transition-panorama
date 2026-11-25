@@ -1,7 +1,15 @@
 import * as Utils from 'utils';
 import { z } from 'zod';
 
-import type { Geocoder, GeocoderOptions, Place, PlaceSearch } from './geocoder';
+import type {
+    Geocoder,
+    GeocoderOptions,
+    LanguageTag,
+    Place,
+    PlaceLookup,
+    PlaceSearch,
+} from './geocoder';
+import { createLanguageHeaders } from './language-headers';
 
 // Nominatim's answers, with only the fields we use
 // https://nominatim.org/release-docs/latest/api/Search/
@@ -117,23 +125,32 @@ export class NominatimGeocoder implements Geocoder {
                 this.options.focusBoxHalfSizeDegrees ??
                     defaultFocusBoxHalfSizeDegrees,
             ),
+            search.language,
         );
     }
 
-    async lookUpPlace(id: string): Promise<Place | null> {
+    async lookUpPlace(lookup: PlaceLookup): Promise<Place | null> {
+        const { id, language } = lookup;
         if (!placeIdPattern.test(id)) {
             return null;
         }
         const [place] = await this.fetchPlaces(
             'lookup',
             new URLSearchParams({ osm_ids: id, format: 'geojson' }),
+            language,
         );
         return place ?? null;
     }
 
-    private async fetchPlaces(path: string, params: URLSearchParams) {
+    private async fetchPlaces(
+        path: string,
+        params: URLSearchParams,
+        language: LanguageTag | undefined,
+    ) {
         const response = await Utils.fetchUpstream(() =>
-            fetch(`${this.url}/${path}?${params.toString()}`),
+            fetch(`${this.url}/${path}?${params.toString()}`, {
+                headers: createLanguageHeaders(language),
+            }),
         );
         if (!response.ok) {
             throw new Utils.HttpUpstreamError({
