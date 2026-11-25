@@ -63,7 +63,8 @@ const PlaceInput = ({
     const anchorRef = useComboboxAnchor();
     const [open, setOpen] = useState(false);
     const setPlaceLookupQueryData = useSetPlaceLookupQueryData();
-    const { data: lookedUpPlace } = usePlaceLookupQuery(value?.id);
+    const { data: lookedUpPlace, isFetching: isLookingUp } =
+        usePlaceLookupQuery(value?.id);
 
     // `label` is the text of the place currently set, which can also change
     // from outside, like a map click. `text` is what the field shows: the
@@ -77,11 +78,12 @@ const PlaceInput = ({
     }
 
     const isTyping = text !== label;
+    const isLabelOutdated = isLookingUp && !isTyping;
     const [throttledText] = useDebounce(text, 300, {
         leading: true,
         maxWait: 300,
     });
-    const { data: places = [] } = usePlaceSearchQuery(
+    const { data: places = [], isPlaceholderData } = usePlaceSearchQuery(
         isTyping && text.trim() ? throttledText : '',
         focus,
     );
@@ -122,9 +124,12 @@ const PlaceInput = ({
                     ref={inputRef}
                     placeholder={placeholder}
                     showTrigger={false}
+                    aria-busy={isLabelOutdated}
                     className="
                         h-10.5 rounded-md bg-card
                         dark:bg-card
+                        [&_input]:transition-opacity
+                        [&_input[aria-busy=true]]:opacity-50
                     "
                 >
                     <InputGroupAddon align="inline-start" className="ps-3.5">
@@ -150,7 +155,12 @@ const PlaceInput = ({
                     dark:shadow-[0_6px_18px_rgb(0_0_0/0.55)]
                 "
             >
-                <ComboboxList>
+                <ComboboxList
+                    className={`
+                        transition-opacity
+                        ${isPlaceholderData ? 'opacity-50' : ''}
+                    `}
+                >
                     {(place: Api.Place) => (
                         <ComboboxItem
                             key={place.id}
