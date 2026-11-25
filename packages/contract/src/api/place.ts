@@ -4,6 +4,8 @@ import { z } from 'zod';
 export const PlaceSearchBodySchema = z.object({
     text: z.string().trim().min(1).max(200),
     focus: Utils.LngLatSchema.optional(),
+    // Of the labels
+    language: Utils.LanguageTagSchema,
 });
 
 export type PlaceSearchBody = z.infer<typeof PlaceSearchBodySchema>;
@@ -32,10 +34,18 @@ export const PlaceLookupParamsSchema = z.object({
 
 export type PlaceLookupParams = z.infer<typeof PlaceLookupParamsSchema>;
 
+export const PlaceLookupQuerySchema = z.object({
+    // Of the label
+    language: Utils.LanguageTagSchema,
+});
+
+export type PlaceLookupQuery = z.infer<typeof PlaceLookupQuerySchema>;
+
 export const placeLookupEndpoint = {
     method: 'get',
     // The id must be URL-encoded, as it contains slashes
     path: '/api/places/:id',
     params: PlaceLookupParamsSchema,
+    query: PlaceLookupQuerySchema,
     response: PlaceSchema,
 } as const;
