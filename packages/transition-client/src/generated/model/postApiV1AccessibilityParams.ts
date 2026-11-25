@@ -6,8 +6,6 @@
  */
 
 export type PostApiV1AccessibilityParams = {
-/**
- * Whether or not to also provide the accessibility map in GeoJSON format in the response. Otherwise, only a list of accessible nodes will be provided. The default value is true
- */
-withGeojson?: boolean;
+  /** Whether or not to also provide the accessibility map in GeoJSON format in the response. Otherwise, only a list of accessible nodes will be provided. The default value is true */
+  withGeojson?: boolean;
 };

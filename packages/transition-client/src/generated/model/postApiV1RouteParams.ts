@@ -6,8 +6,6 @@
  */
 
 export type PostApiV1RouteParams = {
-/**
- * Whether or not to also provide the calculated routes in GeoJSON format in the response. The default value is true
- */
-withGeojson?: boolean;
+  /** Whether or not to also provide the calculated routes in GeoJSON format in the response. The default value is true */
+  withGeojson?: boolean;
 };

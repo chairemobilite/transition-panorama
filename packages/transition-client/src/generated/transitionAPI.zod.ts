@@ -340,6 +340,12 @@ export const postApiV1RouteResponseResultBusUrbanPathsItemGeometryCoordinatesIte
 export const postApiV1RouteResponseResultBusUrbanPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
 export const postApiV1RouteResponseResultBusUrbanPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
 
+export const postApiV1RouteResponseResultAdditionalPropertiesPathsItemGeometryCoordinatesItemMin = 2;
+export const postApiV1RouteResponseResultAdditionalPropertiesPathsItemGeometryCoordinatesItemMax = 2;
+
+export const postApiV1RouteResponseResultAdditionalPropertiesPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin = 2;
+export const postApiV1RouteResponseResultAdditionalPropertiesPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax = 2;
+
 
 
 export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
@@ -390,16 +396,16 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
   "scenarioId": /*#__PURE__*/ zod.string().check(/*#__PURE__*/ zod.describe('UUID of the scenario to query. A scenario defines the services, agencies and lines to use for a transit calculation.')),
   "departureTimeSecondsSinceMidnight": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The departure time of the trip, in seconds since midnight. There is no timezone associated with the time, Transition is timezone agnostic as a scenario typically covers a single timezone and the 0 is the midnight in the agency of that scenario. The arrivalTimeSecondsSinceMidnight parameter may be provided instead.')),
   "arrivalTimeSecondsSinceMidnight": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The arrival time of the trip, in seconds since midnight. See description for the departureTimeSecondsSinceMidnight parameter, which may be included instead.')),
-  "maxTotalTravelTimeSeconds": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.describe('The maximum total travel time between origin and destination, including access, transfer and egress times.')),
-  "minWaitingTimeSeconds": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.describe('The minimum time to wait at a stop/station, in seconds, to cope with uncertainties in the vehicle arrival times. Suggested value: 180')),
-  "maxTransferTravelTimeSeconds": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.describe('Maximum time, in seconds, for each transfer between stop/station during the trip.')),
-  "maxAccessEgressTravelTimeSeconds": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.describe('Maximum time, in seconds, to reach the first stop/station in the trip, and to reach the destination from the last stop/station.')),
-  "maxFirstWaitingTimeSeconds": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.describe('The maximum time, in seconds, one can wait at first stop/station to consider this trip valid.')),
-  "withAlternatives": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.boolean()).check(/*#__PURE__*/ zod.describe('Whether the results should return various alternatives if available or just a single result. Defaults to false, no alternatives'))
+  "maxTotalTravelTimeSeconds": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The maximum total travel time between origin and destination, including access, transfer and egress times.')),
+  "minWaitingTimeSeconds": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The minimum time to wait at a stop/station, in seconds, to cope with uncertainties in the vehicle arrival times. Suggested value: 180')),
+  "maxTransferTravelTimeSeconds": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('Maximum time, in seconds, for each transfer between stop/station during the trip.')),
+  "maxAccessEgressTravelTimeSeconds": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('Maximum time, in seconds, to reach the first stop/station in the trip, and to reach the destination from the last stop/station.')),
+  "maxFirstWaitingTimeSeconds": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The maximum time, in seconds, one can wait at first stop/station to consider this trip valid.')),
+  "withAlternatives": /*#__PURE__*/ zod.boolean().check(/*#__PURE__*/ zod.describe('Whether the results should return various alternatives if available or just a single result. Defaults to false, no alternatives'))
 })]).check(/*#__PURE__*/ zod.describe('Parameters used for the routing calculation')), /*#__PURE__*/ zod.looseObject({
 
 })),
-  "result": /*#__PURE__*/ zod.object({
+  "result": /*#__PURE__*/ zod.catchall(/*#__PURE__*/ zod.object({
   "transit": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.object({
   "paths": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
   "departureTime": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('Optimized departure time in seconds since midnight')),
@@ -639,7 +645,35 @@ export const PostApiV1RouteResponse = /*#__PURE__*/ zod.object({
   "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR', 'TR_CALCULATOR_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
 })).check(/*#__PURE__*/ zod.describe('An overview of the server side error in case of failure while executing the route request. If there is no error, this will not be included in the response.'))
 })).check(/*#__PURE__*/ zod.describe('Each mode of transportation in routingModes will have their own result in this format, except for "transit". The property names correspond directly to the names of the modes of transportation provided'))
-}).check(/*#__PURE__*/ zod.describe('Result of the routing calculation'))
+}), /*#__PURE__*/ zod.object({
+  "paths": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
+  "geometry": /*#__PURE__*/ zod.object({
+  "type": /*#__PURE__*/ zod.enum(['LineString']),
+  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultAdditionalPropertiesPathsItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultAdditionalPropertiesPathsItemGeometryCoordinatesItemMax)))
+}).check(/*#__PURE__*/ zod.describe('A GeoJSON LineString object representing this route')),
+  "distanceMeters": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The distance travalled along this route, in meters')),
+  "travelTimeSeconds": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The estimated duration of the trip along this route, in seconds'))
+})).check(/*#__PURE__*/ zod.describe('A list of all calculated routes')),
+  "pathsGeojson": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
+  "type": /*#__PURE__*/ zod.enum(['FeatureCollection']),
+  "features": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.object({
+  "type": /*#__PURE__*/ zod.enum(['Feature']),
+  "geometry": /*#__PURE__*/ zod.object({
+  "type": /*#__PURE__*/ zod.enum(['LineString']),
+  "coordinates": /*#__PURE__*/ zod.array(/*#__PURE__*/ zod.array(/*#__PURE__*/ zod.number()).check(/*#__PURE__*/ zod.minLength(postApiV1RouteResponseResultAdditionalPropertiesPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMin)).check(/*#__PURE__*/ zod.maxLength(postApiV1RouteResponseResultAdditionalPropertiesPathsGeojsonItemFeaturesItemGeometryCoordinatesItemMax)))
+}),
+  "properties": /*#__PURE__*/ zod.object({
+  "mode": /*#__PURE__*/ zod.string().check(/*#__PURE__*/ zod.describe('The mode of transportation used for this route')),
+  "distanceMeters": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The distance travalled along this route, in meters')),
+  "travelTimeSeconds": /*#__PURE__*/ zod.number().check(/*#__PURE__*/ zod.describe('The estimated duration of the trip along this route, in seconds'))
+})
+}))
+}))).check(/*#__PURE__*/ zod.describe('A list of all calculated routes as GeoJSON LineString FeatureCollection objects. Each FeatureCollection object represents one path. This object is only provided if the withGeojson query parameter is set to true')),
+  "noRoutingReason": /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.object({
+  "message": /*#__PURE__*/ zod.string(),
+  "code": /*#__PURE__*/ zod.enum(['TRROUTING_NO_ROUTING_FOUND', 'TRROUTING_NO_ROUTING_NO_ACCESS_AT_ORIGIN', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_DESTINATION', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_ORIGIN_AND_DESTINATION', 'TRROUTING_NO_ROUTING_NO_SERVICE_FROM_ORIGIN', 'TRROUTING_NO_ROUTING_NO_SERVICE_TO_DESTINATION', 'TRROUTING_SERVER_NOT_RUNNING', 'TRROUTING_NOT_ROUTING_NO_ACCESS_AT_PLACE', 'TRROUTING_NO_ROUTING_NO_SERVICE_AT_PLACE', 'TRROUTING_ERROR_UNKNOWN', 'TRROUTING_MISSING_DATA', 'TRROUTING_INVALID_DATA', 'TRROUTING_QUERY_ERROR', 'TR_CALCULATOR_ERROR']).check(/*#__PURE__*/ zod.describe('Code of the routing error.'))
+})).check(/*#__PURE__*/ zod.describe('An overview of the server side error in case of failure while executing the route request. If there is no error, this will not be included in the response.'))
+}).check(/*#__PURE__*/ zod.describe('Each mode of transportation in routingModes will have their own result in this format, except for "transit". The property names correspond directly to the names of the modes of transportation provided'))).check(/*#__PURE__*/ zod.describe('Result of the routing calculation'))
 })
 
 

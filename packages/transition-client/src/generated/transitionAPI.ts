@@ -25,6 +25,26 @@ import type {
 } from './model';
 
 import { fetchTransition } from '../fetch-transition';
+const getHeaders = (...sources: (RequestInit['headers'] | Record<string, string | number | boolean | bigint | readonly string[] | undefined>)[]) => {
+  const seen = new Set<string>();
+  const layers: [string, string | readonly string[]][][] = [];
+  for (const source of sources.reverse()) {
+    if (!source) continue;
+    const entries = source instanceof Headers
+      ? source.entries()
+      : Symbol.iterator in source
+        ? Array.from(source as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string])
+        : Object.entries<string | number | boolean | bigint | readonly string[] | undefined>(source);
+    const layer: [string, string | readonly string[]][] = [];
+    for (const [name, value] of entries) {
+      if (value !== undefined && !seen.has(name.toLowerCase())) layer.push([name, typeof value === 'object' ? value : String(value)]);
+    }
+    for (const [name] of layer) seen.add(name.toLowerCase());
+    layers.push(layer);
+  }
+  return Object.fromEntries(layers.reverse().flat()) as Extract<RequestInit['headers'], Record<string, unknown>>;
+};
+
 export type postTokenResponse200 = {
   data: string
   status: 200
@@ -63,25 +83,11 @@ export const getPostTokenUrl = () => {
  */
 export const postToken = async (postTokenBody: PostTokenBody, options?: Parameters<typeof fetchTransition>[1]): Promise<postTokenResponse> => {
 
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return fetchTransition<postTokenResponse>(getPostTokenUrl(),
+  return fetchTransition<postTokenResponse>(getPostTokenUrl(),
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    headers: getHeaders({ 'Content-Type': 'application/json' }, options?.headers),
     body: JSON.stringify(postTokenBody)
   }
 );}
@@ -459,8 +465,26 @@ export type postApiV1SummaryResponse = (postApiV1SummaryResponseSuccess | postAp
 
 export const getPostApiV1SummaryUrl = (params: PostApiV1SummaryParams,) => {
   const normalizedParams = new URLSearchParams();
+  const formObjectParameters = new Map<string, string>([["originGeojson","flatten"],["destinationGeojson","flatten"]]);
 
   Object.entries(params || {}).forEach(([key, value]) => {
+    if (typeof value === 'object' && value !== null && !Array.isArray(value) && !(value instanceof Date) && formObjectParameters.has(key)) {
+      const commaParts: string[] = [];
+      Object.entries(value).forEach(([subKey, subValue]) => {
+        const items = (Array.isArray(subValue) ? subValue : [subValue])
+          .filter((v) => v !== undefined)
+          .map((v) => v === null ? 'null' : v instanceof Date ? v.toISOString() : typeof v === 'object' ? JSON.stringify(v) : String(v));
+        if (formObjectParameters.get(key) === 'flatten') {
+          items.forEach((item) => normalizedParams.append(subKey, item));
+        } else if (items.length > 0) {
+          commaParts.push(subKey, ...items);
+        }
+      });
+      if (commaParts.length > 0) {
+        normalizedParams.append(key, commaParts.join(','));
+      }
+      return;
+    }
 
     if (value !== undefined) {
       normalizedParams.append(key, value === null ? 'null' : String(value))
@@ -535,25 +559,11 @@ export const getPostApiV1RouteUrl = (params?: PostApiV1RouteParams,) => {
 export const postApiV1Route = async (postApiV1RouteBody: PostApiV1RouteBody,
     params?: PostApiV1RouteParams, options?: Parameters<typeof fetchTransition>[1]): Promise<postApiV1RouteResponse> => {
 
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return fetchTransition<postApiV1RouteResponse>(getPostApiV1RouteUrl(params),
+  return fetchTransition<postApiV1RouteResponse>(getPostApiV1RouteUrl(params),
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    headers: getHeaders({ 'Content-Type': 'application/json' }, options?.headers),
     body: JSON.stringify(postApiV1RouteBody)
   }
 );}
@@ -606,25 +616,11 @@ export const getPostApiV1AccessibilityUrl = (params?: PostApiV1AccessibilityPara
 export const postApiV1Accessibility = async (postApiV1AccessibilityBody: PostApiV1AccessibilityBody,
     params?: PostApiV1AccessibilityParams, options?: Parameters<typeof fetchTransition>[1]): Promise<postApiV1AccessibilityResponse> => {
 
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return fetchTransition<postApiV1AccessibilityResponse>(getPostApiV1AccessibilityUrl(params),
+  return fetchTransition<postApiV1AccessibilityResponse>(getPostApiV1AccessibilityUrl(params),
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    headers: getHeaders({ 'Content-Type': 'application/json' }, options?.headers),
     body: JSON.stringify(postApiV1AccessibilityBody)
   }
 );}
