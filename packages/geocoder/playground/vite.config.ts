@@ -52,6 +52,22 @@ const createProxy = (config: Config): Record<string, ProxyOptions> => {
                     changeOrigin: true,
                     rewrite: (path) => path.slice(proxyPath.length),
                     headers: { 'User-Agent': config.userAgent },
+                    // The geocoders send the language in a header, not in the
+                    // URL. Some services, like Photon's public instance, let
+                    // the browser cache their answers without saying they
+                    // depend on it, so it would show an answer in another
+                    // language.
+                    configure: (proxy) => {
+                        proxy.on('proxyRes', (proxyRes) => {
+                            const vary = proxyRes.headers.vary ?? '';
+                            if (/accept-language/i.test(vary)) {
+                                return;
+                            }
+                            proxyRes.headers.vary = [vary, 'Accept-Language']
+                                .filter(Boolean)
+                                .join(', ');
+                        });
+                    },
                 },
             ];
         }),

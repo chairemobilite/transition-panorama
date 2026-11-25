@@ -1,6 +1,6 @@
 import { queryOptions, skipToken, useQuery } from '@tanstack/react-query';
 
-import { createGeocoder } from '../../../../../src';
+import { createGeocoder, type PlaceSearch } from '../../../../../src';
 import type { GeocoderConfig } from '../../../config/geocoder-configs';
 import {
     matchPlaces,
@@ -10,7 +10,7 @@ import {
 
 const fetchPlaceSearch = async (
     geocoderConfig: GeocoderConfig,
-    text: string,
+    search: PlaceSearch,
 ): Promise<SearchResults> => {
     let response: unknown;
     const geocoder = createGeocoder(
@@ -22,7 +22,7 @@ const fetchPlaceSearch = async (
             },
         },
     );
-    const places = await geocoder.searchPlaces({ text });
+    const places = await geocoder.searchPlaces(search);
     const rawGroups = rawGroupFinders[geocoderConfig.providerName](response);
     return matchPlaces(rawGroups, places);
 };
@@ -30,12 +30,23 @@ const fetchPlaceSearch = async (
 export const createPlaceSearchQueryOptions = (
     geocoderConfig: GeocoderConfig,
     text: string,
+    language: string,
 ) => {
     const trimmedText = text.trim();
+    const trimmedLanguage = language.trim() || undefined;
     return queryOptions({
-        queryKey: ['placeSearch', geocoderConfig.url, trimmedText],
+        queryKey: [
+            'placeSearch',
+            geocoderConfig.url,
+            trimmedText,
+            trimmedLanguage,
+        ],
         queryFn: trimmedText
-            ? () => fetchPlaceSearch(geocoderConfig, trimmedText)
+            ? () =>
+                  fetchPlaceSearch(geocoderConfig, {
+                      text: trimmedText,
+                      language: trimmedLanguage,
+                  })
             : skipToken,
         // The previous results stay while typing, but not once the text is
         // erased
@@ -49,6 +60,9 @@ export const createPlaceSearchQueryOptions = (
 export const usePlaceSearchQuery = (
     geocoderConfig: GeocoderConfig,
     text: string,
+    language: string,
 ) => {
-    return useQuery(createPlaceSearchQueryOptions(geocoderConfig, text));
+    return useQuery(
+        createPlaceSearchQueryOptions(geocoderConfig, text, language),
+    );
 };

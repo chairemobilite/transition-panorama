@@ -8,17 +8,29 @@ import SearchResultItem from './search-result-item';
 interface GeocoderColumnProps {
     geocoderConfig: GeocoderConfig;
     text: string;
+    language: string;
 }
 
 const GeocoderColumn = (props: GeocoderColumnProps) => {
-    const { geocoderConfig, text } = props;
-    const [throttledText] = useDebounce(text, geocoderConfig.throttleMs, {
+    const { geocoderConfig, text, language } = props;
+    const throttleOptions = {
         leading: true,
         maxWait: geocoderConfig.throttleMs,
-    });
+    };
+    const [throttledText] = useDebounce(
+        text,
+        geocoderConfig.throttleMs,
+        throttleOptions,
+    );
+    const [throttledLanguage] = useDebounce(
+        language,
+        geocoderConfig.throttleMs,
+        throttleOptions,
+    );
     const { data, error, isFetching } = usePlaceSearchQuery(
         geocoderConfig,
         throttledText,
+        throttledLanguage,
     );
 
     return (
