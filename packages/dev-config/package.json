@@ -19,23 +19,23 @@
     "prettier": "./prettier.json",
     "dependencies": {
         "@eslint/js": "^10.0.1",
-        "@eslint/markdown": "^8.0.3",
+        "@eslint/markdown": "^9.0.0",
         "eslint-import-resolver-typescript": "^4.4.5",
         "eslint-plugin-check-file": "^3.3.2",
-        "eslint-plugin-import-x": "^4.17.1",
-        "typescript-eslint": "^8.70.1"
+        "eslint-plugin-import-x": "^4.18.1",
+        "typescript-eslint": "^8.74.0"
     },
     "peerDependencies": {
         "eslint": "^10.0.0",
         "typescript": "^6.0.0"
     },
     "devDependencies": {
-        "@tsconfig/strictest": "2.0.8",
-        "@types/node": "26.6.2",
-        "eslint": "^10.11.0",
-        "globals": "^17.12.0",
+        "@tsconfig/strictest": "2.0.9",
+        "@types/node": "24.19.2",
+        "eslint": "^10.15.0",
+        "globals": "^17.14.0",
         "jiti": "^2.7.0",
-        "prettier": "3.9.9",
+        "prettier": "3.10.1",
         "typescript": "6.0.3"
     }
 }
